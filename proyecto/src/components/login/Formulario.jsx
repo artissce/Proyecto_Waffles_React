@@ -1,5 +1,7 @@
 import './Formulario.css'
 import { useState } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Alert } from 'react-bootstrap';
 export function Formulario({setUsuario}){
     const [user,setUser]=useState("");
     const [pwd,setPwd]=useState("");
@@ -15,21 +17,32 @@ export function Formulario({setUsuario}){
     }
     return(
         <section >
-            <h1>Login</h1>
-            <form className='formulario' onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label forhtml="text">Usuario </label>
-                    <br/>
-                    <input type="text" className="form-control" value={user} onChange={e=>setUser(e.target.value)}/>
+            <div className="alert-container">
+            {error && (
+                <div className="alert-container">
+                <Alert variant="danger" onClose={() => setError(false)} dismissible>
+                    Todos los campos son obligatorios
+                </Alert>
                 </div>
-                <div className="form-group">
-                    <label forhtml="pwd">Contraseña </label>
-                    <br/>
-                    <input type="password" className="form-control" value={pwd} onChange={e=>setPwd(e.target.value)}/>
-                </div>
-                <button type="submit" className="btn btn-default">Iniciar</button>
-            </form>
-            {error && <p>Todos los campos son obligatorios</p>}
+            )}
+            </div>
+            <div className="form-container">
+                <form className='formulario' onSubmit={handleSubmit}>
+                    <h1>Login</h1>
+                    <div className="form-group">
+                        <label forhtml="text">Usuario </label>
+                        <br/>
+                        <input type="text" className="form-control" value={user} onChange={e=>setUser(e.target.value)}/>
+                    </div>
+                    <div className="form-group">
+                        <label forhtml="pwd">Contraseña </label>
+                        <br/>
+                        <input type="password" className="form-control" value={pwd} onChange={e=>setPwd(e.target.value)}/>
+                    </div>
+                    <button type="submit" className="btn btn-default">Iniciar</button>
+                </form>
+            </div>
+            
         </section>
     )
 }
