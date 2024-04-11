@@ -3,7 +3,7 @@
 //tabla en plural y minisuclas
 //importar la conexion a la db
 import db from "../database/db.js"
-import {DataTypes} from "sequelize";
+import {DataTypes} from "sequelize";//prueba de que puedo mandar push
 
 const Model = db.define('pedidos',{
     //INSERT INTO `pedidos` (`idPedido`, `cliente`, `fecha`, `hora`, `paquete`, `estado`) VALUES (NULL, 'Sofia', '2024-04-11', '13:13:41', '1', 'En proceso');
