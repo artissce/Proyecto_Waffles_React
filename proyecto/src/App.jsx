@@ -9,8 +9,9 @@ function App() {
   return (
     <div className="App">
       {
-        !usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/>
+        /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/>*/
       }
+      <Home></Home>
     </div>
   );
 }
