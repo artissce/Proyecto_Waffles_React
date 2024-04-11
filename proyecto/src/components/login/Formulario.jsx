@@ -1,6 +1,6 @@
 import './Formulario.css'
 import { useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Alert } from 'react-bootstrap';
 export function Formulario({setUsuario}){
     const [user,setUser]=useState("");
