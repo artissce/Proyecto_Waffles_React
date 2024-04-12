@@ -4,9 +4,9 @@ import { createPedido, deletePedido, getAll, getPedido, updatePedido } from "../
 const router = express.Router()
 
 router.get('/',getAll)
-router.get('/:id',getPedido)
+router.get('/:idPedido',getPedido)
 router.post('/',createPedido)
-router.put('/:id',updatePedido)
-router.delete('/:id',deletePedido)
+router.put('/:idPedido',updatePedido)
+router.delete('/:idPedido',deletePedido)
 
 export default router

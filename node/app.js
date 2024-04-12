@@ -1,7 +1,7 @@
 import express from "express"
 import cors from 'cors'
 import db from "./database/db.js"
-import router from "./routes/routes.js"
+import router from "./routes/routes.js"//nodemon app para ejecutar la conexion
 
 const app = express()
 app.use(cors())
