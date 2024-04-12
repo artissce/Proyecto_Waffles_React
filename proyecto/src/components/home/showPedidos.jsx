@@ -1,5 +1,5 @@
-import axios from 'axios'//nos conecta a backend
-import { useState, useEffect } from 'react'
+import axios from 'axios'
+import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
 const URI = 'http://localhost:8000/pedidos/'
@@ -10,14 +10,14 @@ const ShowPedidos = () => {
         getPedidos()
     },[])
     //procedimiento para mostrar todos los pedidos
-    const getPedidos = async()=>{
-        const res = await axios.get(URI)//axios da un objeto de resultados
+    const getPedidos = async () =>{
+        const res = await axios.get(URI)
         setPedidos(res.data)
     }
 
     //proc para eliminar un pedido
     const deletePedidos = async(idPedido) => {
-        axios.delete(`${URI}${idPedido}`)
+        await axios.delete(`${URI}${idPedido}`)
         getPedidos()
     }
     //proc crear
