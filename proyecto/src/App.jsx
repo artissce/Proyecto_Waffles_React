@@ -4,6 +4,7 @@ import {Formulario} from './components/login/Formulario'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Home } from './components/home/Home';
 import { useState } from 'react';
+
 function App() {
   const [usuario,setUsuario]=useState([])//arreglo vacio
   return (
@@ -11,7 +12,9 @@ function App() {
       {
         /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/>*/
       }
-      <Home></Home>
+      <Home/>
+    
+      
    </div>
   );
 }
