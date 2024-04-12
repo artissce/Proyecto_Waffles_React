@@ -1,4 +1,4 @@
-import PedidoModel from "../models/BlogModel.js";
+import PedidoModel from "../models/PedidoModel.js";
 
 /*METODOS PARA EL CRUD */
 
