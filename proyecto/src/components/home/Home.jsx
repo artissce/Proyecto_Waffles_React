@@ -11,7 +11,7 @@ export function Home(){
                 <Routes>
                     <Route path='/' element={<ShowPedidos/>}/>
                     <Route path='/create' element={<CreatePedido/>}/>
-                    <Route path='/edit/:id' element={<EditPedido/>}/>
+                    <Route path='/edit/:idPedido' element={<EditPedido/>}/>
                 </Routes>
             </BrowserRouter>
 
