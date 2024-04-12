@@ -12,7 +12,7 @@ function App() {
         /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/>*/
       }
       <Home></Home>
-    </div>
+   </div>
   );
 }
 
