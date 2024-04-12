@@ -16,7 +16,7 @@ const ShowPedidos = () => {
     }
 
     //proc para eliminar un pedido
-    const deletePedidos = async(idPedido)=>{
+    const deletePedidos = async(idPedido) => {
         axios.delete(`${URI}${idPedido}`)
         getPedidos()
     }
