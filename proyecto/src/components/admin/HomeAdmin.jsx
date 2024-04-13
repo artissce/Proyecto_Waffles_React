@@ -7,6 +7,7 @@ export function HomeAdmin(){
         <div>
             <BrowserRouter>
                 <Routes>
+                    <Route path='/' element={<h1>Checa el path</h1>}/>
                     <Route path='/roles' element={<ShowRol/>}/>
                     <Route path='/roles/create' element={<CreateRol/>}/>
                     <Route path='/roles/edit/:idRol' element={<EditRol/>}/>
