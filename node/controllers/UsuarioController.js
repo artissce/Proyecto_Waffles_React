@@ -3,7 +3,10 @@ import RolModel from "../models/RolModel.js";
 /*METODOS PARA EL CRUD */
 
 //mostrar todos los registros
-export const getAll = async(req,res) => {
+// Antes de usar los modelos, sincronizarlos con la base de datos
+await UsuarioModel.sync();
+await RolModel.sync();
+export const getAllUsuario = async(req,res) => {
     try {
         const usuario= await UsuarioModel.findAll({
             attributes: ['idUsuario', 'nombre', 'correo', 'contrasena','idRol'],
@@ -32,22 +35,27 @@ export const createUsuario= async(req,res) => {
     try {
         // Obtener los datos del usuario del cuerpo de la solicitud
         const { nombre, correo, contrasena, idRol } = req.body;
-
         // Verificar que el rol exista en la base de datos
         const rolExistente = await RolModel.findByPk(idRol);
         if (!rolExistente) {
             return res.status(404).json({ message: 'Rol not found' });
         }
-
         // Crear el nuevo usuario
         const newUsuario = await UsuarioModel.create({
             nombre: nombre,
             correo: correo,
             contrasena: contrasena,
+            
         });
-
-        // Asociar el usuario con el rol
-        await newUsuario.setRolModel(rolExistente);
+        // Ensure newUsuario is created successfully before association
+        if (newUsuario) {
+            await newUsuario.addRol(rolExistente);
+            res.json({ message: "Registro de usuario correctamente" });
+        } else {
+            // Handle creation error (log or return appropriate error message)
+            console.error("Error creating usuario");
+            res.status(500).json({ message: "Error creating usuario" });
+        }
         res.json({ message: "Registro de usuario correctamente" });
     } catch (error) {
         res.json({message:error.message})

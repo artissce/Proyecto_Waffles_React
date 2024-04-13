@@ -10,6 +10,7 @@ app.use(express.json())
 
 app.use('/pedidos',Routers.PedidoRouter)
 app.use('/roles', Routers.RolRouter);
+app.use('/usuarios', Routers.UsuarioRouter);
 try {
     await db.authenticate();
     console.log('Conexion exitosa a la DB');
