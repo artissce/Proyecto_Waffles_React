@@ -1,17 +1,15 @@
-import Navigation from "./Navigation";
-import ShowPedidos from "./ShowPedidos";
 import { BrowserRouter, Route,Routes } from 'react-router-dom';
-import CreatePedido from "./CreatePedido";
-import EditPedido from "./EditPedido";
-export function Home(Admin){
+import ShowRol from "./rol/ShowRol";
+import CreateRol from "./rol/CreateRol";
+import EditRol from "./rol/EditRol";
+export function HomeAdmin(){
     return(
         <div>
             <BrowserRouter>
-             <Navigation/>
                 <Routes>
-                    <Route path='/' element={<ShowPedidos/>}/>
-                    <Route path='/create' element={<CreatePedido/>}/>
-                    <Route path='/edit/:idPedido' element={<EditPedido/>}/>
+                    <Route path='/roles' element={<ShowRol/>}/>
+                    <Route path='/roles/create' element={<CreateRol/>}/>
+                    <Route path='/roles/edit/:idRol' element={<EditRol/>}/>
                 </Routes>
             </BrowserRouter>
 

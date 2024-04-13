@@ -1,12 +1,25 @@
-import express from "express"
-import { createPedido, deletePedido, getAll, getPedido, updatePedido } from "../controllers/PedidoController.js"
+import express from "express";
+import { createPedido, deletePedido, getAll, getPedido, updatePedido } from "../controllers/PedidoController.js";
+import { createRol, deleteRol, getAllRol, getRol, updateRol } from "../controllers/RolController.js";
 
-const router = express.Router()
+const PedidoRouter = express.Router();
+//PEDIDOS
+PedidoRouter.get('/', getAll);
+PedidoRouter.get('/:idPedido', getPedido);
+PedidoRouter.post('/', createPedido);
+PedidoRouter.put('/:idPedido', updatePedido);
+PedidoRouter.delete('/:idPedido', deletePedido);
 
-router.get('/',getAll)
-router.get('/:idPedido',getPedido)
-router.post('/',createPedido)
-router.put('/:idPedido',updatePedido)
-router.delete('/:idPedido',deletePedido)
+//ROL
+const RolRouter = express.Router();
+RolRouter.get('/', getAllRol);
+RolRouter.get('/:idRol', getRol);
+RolRouter.post('/', createRol);
+RolRouter.put('/:idRol', updateRol);
+RolRouter.delete('/:idRol', deleteRol);
 
-export default router
+// Exportar los routers
+export const Routers = {
+  PedidoRouter,
+  RolRouter,
+};

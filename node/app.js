@@ -1,13 +1,15 @@
 import express from "express"
 import cors from 'cors'
 import db from "./database/db.js"
-import router from "./routes/routes.js"//nodemon app para ejecutar la conexion
+import {Routers} from "./routes/routes.js"//nodemon app para ejecutar la conexion
 
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use('/pedidos',router)
 
+
+app.use('/pedidos',Routers.PedidoRouter)
+app.use('/roles', Routers.RolRouter);
 try {
     await db.authenticate();
     console.log('Conexion exitosa a la DB');
