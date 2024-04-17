@@ -1,4 +1,4 @@
-
+//PENDIENTEEEEE
 import db from "../database/db.js"
 import {DataTypes} from "sequelize";//prueba de que puedo mandar push
 

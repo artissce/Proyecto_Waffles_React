@@ -11,6 +11,7 @@ app.use(express.json())
 app.use('/pedidos',Routers.PedidoRouter)
 app.use('/roles', Routers.RolRouter);
 app.use('/usuarios', Routers.UsuarioRouter);
+app.use('/tipo', Routers.TipoRouter);
 (async () => {
   try {
     await db.authenticate();
