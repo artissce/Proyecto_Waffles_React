@@ -13,6 +13,7 @@ app.use('/roles', Routers.RolRouter);
 app.use('/usuarios', Routers.UsuarioRouter);
 app.use('/tipo', Routers.TipoRouter);
 app.use('/ing', Routers.IngRouter);
+app.use('/pi', Routers.PIRouter);
 (async () => {
   try {
     await db.authenticate();
