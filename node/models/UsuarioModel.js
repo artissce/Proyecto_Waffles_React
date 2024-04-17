@@ -22,8 +22,8 @@ const UsuarioModel= db.define('usuarios',{
         min: 8, // Longitud mínima de 8 caracteres
         max: 32 // Longitud máxima de 32 caracteres
       }
-    },   idRol: { type: DataTypes.INTEGER, allowNull: false }, // Asegúrate de que idRol no pueda ser nulo
-  }//define el tipo
+    }   
+  },idRol: { type: DataTypes.INTEGER, allowNull: false }, // Asegúrate de que idRol no pueda ser nulo//define el tipo
     }, {
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })

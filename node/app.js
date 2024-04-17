@@ -12,6 +12,7 @@ app.use('/pedidos',Routers.PedidoRouter)
 app.use('/roles', Routers.RolRouter);
 app.use('/usuarios', Routers.UsuarioRouter);
 app.use('/tipo', Routers.TipoRouter);
+app.use('/ing', Routers.IngRouter);
 (async () => {
   try {
     await db.authenticate();

@@ -3,6 +3,8 @@ import { createPedido, deletePedido, getAll, getPedido, updatePedido } from "../
 import { createRol, deleteRol, getAllRol, getRol, updateRol } from "../controllers/RolController.js";
 import { createUsuario, deleteUsuario, getAllUsuario, getUsuario, updateUsuario } from "../controllers/UsuarioController.js";
 import { createTipo, deleteTipo, getAllTipo, getTipo, updateTipo } from "../controllers/TipoIngredientesController.js";
+import { createIng, deleteIng, getAllIng, getIng, updateIng } from "../controllers/IngredienteController.js";
+
 
 const PedidoRouter = express.Router();
 //PEDIDOS
@@ -34,10 +36,18 @@ TipoRouter.post('/', createTipo);
 TipoRouter.put('/:idTipo', updateTipo);
 TipoRouter.delete('/:idTipo', deleteTipo);
 
+const IngRouter = express.Router();
+IngRouter.get('/', getAllIng);
+IngRouter.get('/:idIng', getIng);
+IngRouter.post('/', createIng);
+IngRouter.put('/:idIng', updateIng);
+IngRouter.delete('/:idIng', deleteIng);
+
 // Exportar los routers
 export const Routers = {
   PedidoRouter,
   RolRouter,
   UsuarioRouter,
   TipoRouter,
+  IngRouter
 };
