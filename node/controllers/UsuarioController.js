@@ -31,36 +31,41 @@ export const getUsuario = async(req,res) => {
     }
 }
 //crear un registro
-export const createUsuario= async(req,res) => {
+// Función para crear un usuario con su rol asociado
+export const createUsuario = async (req, res) => {
     try {
-        // Obtener los datos del usuario del cuerpo de la solicitud
-        const { nombre, correo, contrasena, idRol } = req.body;
-        // Verificar que el rol exista en la base de datos
-        const rolExistente = await RolModel.findByPk(idRol);
-        if (!rolExistente) {
-            return res.status(404).json({ message: 'Rol not found' });
-        }
-        // Crear el nuevo usuario
-        const newUsuario = await UsuarioModel.create({
-            nombre: nombre,
-            correo: correo,
-            contrasena: contrasena,
-            
-        });
-        // Ensure newUsuario is created successfully before association
-        if (newUsuario) {
-            await newUsuario.addRol(rolExistente);
-            res.json({ message: "Registro de usuario correctamente" });
-        } else {
-            // Handle creation error (log or return appropriate error message)
-            console.error("Error creating usuario");
-            res.status(500).json({ message: "Error creating usuario" });
-        }
-        res.json({ message: "Registro de usuario correctamente" });
+      const { nombre, correo, contrasena, idRol } = req.body;
+  
+      // Verificar que se haya proporcionado un ID de rol
+      if (!idRol) {
+        return res.status(400).json({ message: "ID de rol requerido" });
+      }
+  
+      // Verificar que el rol exista en la base de datos
+      const rolExistente = await RolModel.findByPk(idRol);
+      if (!rolExistente) {
+        return res.status(404).json({ message: 'Rol not found' });
+      }
+  
+      // Crear el nuevo usuario con el rol asociado
+      const newUsuario = await UsuarioModel.create({
+        nombre: nombre,
+        correo: correo,
+        contrasena: contrasena,
+        idRol: idRol, // Asignar el ID del rol al usuario
+      });
+  
+      // Asociar el rol al usuario usando setRol
+      await newUsuario.setRol(rolExistente);
+  
+      res.json({ message: "Registro de usuario correctamente", newUsuario: {...newUsuario.toJSON(), idRol: idRol} });
     } catch (error) {
-        res.json({message:error.message})
+      res.status(500).json({ message: error.message });
     }
-}
+  };
+  
+  
+
 //actualizar un registro
 export const updateUsuario = async(req,res) => {
     try {

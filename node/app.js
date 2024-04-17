@@ -11,18 +11,19 @@ app.use(express.json())
 app.use('/pedidos',Routers.PedidoRouter)
 app.use('/roles', Routers.RolRouter);
 app.use('/usuarios', Routers.UsuarioRouter);
-try {
+(async () => {
+  try {
     await db.authenticate();
-    console.log('Conexion exitosa a la DB');
+    console.log("Conexion exitosa a la DB");
+
+    // Sincronizar los modelos con la base de datos
+    await db.sync(); // Esto sincroniza todos los modelos con la base de datos
+    console.log("Database synced");
   } catch (error) {
-    console.log('ERROR EN CONEXION:', error); // Use error directly
+    console.log("ERROR EN CONEXION:", error);
   }
-  
 
-/*app.get('/', (req,res)=>{
-    res.send('Hola mundo')
-})*/
-
-app.listen(8000,()=>{//puerto deonde escucha 
-    console.log('Server up running in http://localhost:8000/')
-})
+  app.listen(8000, () => {
+    console.log("Server up running in http://localhost:8000/");
+  });
+})();

@@ -11,7 +11,7 @@ const UsuarioModel= db.define('usuarios',{
     idUsuario: { 
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: false, // Disable auto-increment
+        autoIncrement: true, // Disable auto-increment
       },
     nombre: { type: DataTypes.STRING},//define el tipo
     correo: { type: DataTypes.STRING,validate: {
@@ -22,16 +22,16 @@ const UsuarioModel= db.define('usuarios',{
         min: 8, // Longitud mínima de 8 caracteres
         max: 32 // Longitud máxima de 32 caracteres
       }
-    }}//define el tipo
+    },   idRol: { type: DataTypes.INTEGER, allowNull: false }, // Asegúrate de que idRol no pueda ser nulo
+  }//define el tipo
     }, {
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
 
-UsuarioModel.belongsToMany(RolModel, {
-  as: 'roles', // Alias for the association
-  foreignKey: 'idRol', // Foreign key in the Usuario table
-  onDelete: 'CASCADE', // Opcional: elimina automáticamente los roles asociados cuando se elimina un usuario
-  through: 'usuario_rol' // Join table for the many-to-many relationship
-});
+  UsuarioModel.belongsTo(RolModel, {
+    foreignKey: 'idRol', // Nombre de la columna en UsuarioModel que actúa como clave foránea
+    as: 'rol', // Alias para la asociación, opcional
+  });
+ 
 
 export default UsuarioModel;
