@@ -5,7 +5,8 @@
 import db from "../database/db.js"
 import {DataTypes} from "sequelize";//prueba de que puedo mandar push
 import TiposIngredientesModel from "./TiposIngredientesModel.js";
-
+import Producto_IngredienteModel from "./Producto_IngredienteModel.js";
+import ProductoModel from "./ProductoModel.js";
 
 const IngredientesModel= db.define('ingredientes',{
     idIng: { 
@@ -20,10 +21,17 @@ const IngredientesModel= db.define('ingredientes',{
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
 
-  IngredientesModel.belongsTo(TiposIngredientesModel, {
-    foreignKey: 'idTipo', // Nombre de la columna en UsuarioModel que actúa como clave foránea
-    as: 'tipo', // Alias para la asociación, opcional
-  });
+IngredientesModel.belongsTo(TiposIngredientesModel, {
+  foreignKey: 'idTipo', // Nombre de la columna en UsuarioModel que actúa como clave foránea
+  as: 'tipo', // Alias para la asociación, opcional
+});
+
+IngredientesModel.belongsToMany(ProductoModel, {
+  through: Producto_IngredienteModel,
+  foreignKey: 'idIng',
+  otherKey: 'idProducto',
+  as: 'productos',
+});
  
 
 export default IngredientesModel;
