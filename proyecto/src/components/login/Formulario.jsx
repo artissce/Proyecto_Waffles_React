@@ -1,19 +1,39 @@
 import './Formulario.css'
 import { useState } from 'react'
-
+import axios from 'axios';
+import { useNavigate  } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
+
 export function Formulario({setUsuario}){
     const [user,setUser]=useState("");
     const [pwd,setPwd]=useState("");
     const [error,setError]=useState(false);
-    const handleSubmit=(e)=>{
+    const navigate = useNavigate();
+
+    const handleSubmit=async (e)=>{
         e.preventDefault()
         if(user==="" || pwd === ""){
             setError(true)
             return
         }
         setError(false)//regresar sin el cartel
-        setUsuario([user])
+        //setUsuario([user])
+        try {
+            const response = await axios.post('http://localhost:8000/usuarios/correo', { email: user, password: pwd });
+            if (response.status === 200) {
+                // Autenticación exitosa, redirigir al usuario a la página correspondiente
+                if (response.data.idRol === 1) {
+                    navigate('./admin/HomeAdmin');
+                } else if (response.data.idRol === 2) {
+                    navigate('/home/Home');
+                }
+            } else {
+                setError(true); // Mostrar mensaje de error si la autenticación falla
+            }
+        } catch (error) {
+            console.error("Error de autenticación:", error);
+            setError(true); // Mostrar mensaje de error si hay un problema con la solicitud
+        }
     }
     return(
         <section >
