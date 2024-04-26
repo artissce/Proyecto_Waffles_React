@@ -15,49 +15,49 @@ UsuarioModel.belongsTo(RolModel, {
     foreignKey: 'idRol',
     as: 'rol',
 });
-RolModel.hasMany(UsuarioModel);
-
+//RolModel.hasMany(UsuarioModel);
+/*
 TiposIngredientesModel.belongsToMany(IngredientesModel, {
   through: 'TipoIngredientes_Ingredientes', // Nombre de la tabla intermedia
   foreignKey: 'idTipo', // Clave foránea en la tabla intermedia que apunta a TipoIngredientes
   otherKey: 'idIng', // Clave foránea en la tabla intermedia que apunta a Ingredientes
-  as: 'ingredientes', // Alias para la relación, opcional
+  as: 'ingredientes', // Alias para la relación, opcionaltipoingredientes_ingredientes
 });
 
 IngredientesModel.belongsToMany(TiposIngredientesModel, {
-  through: 'TipoIngredientes_Ingredientes',
+  //through: 'TipoIngredientes_Ingredientes',
   foreignKey: 'idIng',
-  otherKey: 'idTipo',
+  //otherKey: 'idTipo',
   as: 'tiposIngredientes',
 });
 
-IngredientesModel.belongsToMany(Producto_IngredienteModel, {
+IngredientesModel.belongsToMany(Producto_IngredienteModel, {//modificar ^
   through: 'Ingredientes_Producto_Ingrediente',
   foreignKey: 'idIng',
   otherKey: 'idProducto',
   as: 'productosI',
 });
 
-Producto_IngredienteModel.belongsToMany(IngredientesModel, {
+Producto_IngredienteModel.belongsToMany(IngredientesModel, {//modificar ^
   through: 'Ingredientes_Producto_Ingrediente',
   foreignKey: 'idProducto',
   otherKey: 'idIng',
   as: 'ingredientes', // Cambiado a un alias único
 });
 
-Producto_IngredienteModel.belongsToMany(ProductoModel, {
+Producto_IngredienteModel.belongsToMany(ProductoModel, {//modificar *
   through: 'Producto_Ingrediente_Producto',
   foreignKey: 'idPI', // Clave foránea en la tabla intermedia que apunta a Producto_Ingrediente
   otherKey: 'idProducto', // Clave foránea en la tabla intermedia que apunta a Producto
   as: 'productosP',
 });
 
-ProductoModel.belongsToMany(Producto_IngredienteModel, {
+ProductoModel.belongsToMany(Producto_IngredienteModel, {//modficar *
   through: 'Producto_Ingrediente_Producto',
   foreignKey: 'idProducto',
   otherKey: 'idPI',
   as: 'ingredientesProducto', // Cambiado a un alias único
-});
+});*/
 
 
 

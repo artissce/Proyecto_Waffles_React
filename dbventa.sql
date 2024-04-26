@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2024 at 05:35 PM
+-- Generation Time: Apr 26, 2024 at 09:04 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -142,17 +142,6 @@ INSERT INTO `producto_ingrediente` (`idProducto`, `idIng`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `producto_ingredientes`
---
-
---CREATE TABLE `producto_ingredientes` (
-  --`idProducto` int(11) NOT NULL,
-  --`idIng` int(11) NOT NULL
---) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `roles`
 --
 
@@ -167,9 +156,7 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`idRol`, `nombreRol`) VALUES
 (1, 'Administrador'),
-(2, 'Cajero'),
-(8, NULL),
-(9, NULL);
+(2, 'Cajero');
 
 -- --------------------------------------------------------
 
@@ -201,19 +188,17 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(255) DEFAULT NULL,
   `correo` varchar(255) DEFAULT NULL,
   `contrasena` varchar(255) DEFAULT NULL,
-  `idRol` int(11) NOT NULL,
-  `roleIdRol` int(11) DEFAULT NULL
+  `idRol` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuario`, `nombre`, `correo`, `contrasena`, `idRol`, `roleIdRol`) VALUES
-(1, 'Ana', 'ana@gmail.com', 'manchas123', 1, NULL),
-(2, 'Saúl Cervantes Candia', 'saul@gmail.com', 'saul123', 2, NULL),
-(31, 'Giova', 'giova@gmail.com', 'giova123', 2, NULL),
-(32, 'Prueba', 'p@gmail.com', 'preuba123', 1, NULL);
+INSERT INTO `usuarios` (`idUsuario`, `nombre`, `correo`, `contrasena`, `idRol`) VALUES
+(1, 'Ana', 'ana@gmail.com', 'manchas123', 1),
+(2, 'Saúl Cervantes Candia', 'saul@gmail.com', 'saul123', 2),
+(31, 'Giova', 'giova@gmail.com', 'giova123', 2);
 
 --
 -- Indexes for dumped tables
@@ -254,13 +239,6 @@ ALTER TABLE `producto_ingrediente`
   ADD KEY `idIng` (`idIng`);
 
 --
--- Indexes for table `producto_ingredientes`
---
---ALTER TABLE `producto_ingredientes`
-  --ADD PRIMARY KEY (`idProducto`,`idIng`),
-  --ADD KEY `idIng` (`idIng`);
-
---
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
@@ -277,8 +255,7 @@ ALTER TABLE `tiposingredientes`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `idRol` (`idRol`),
-  ADD KEY `roleIdRol` (`roleIdRol`);
+  ADD KEY `idRol` (`idRol`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -312,7 +289,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tiposingredientes`
@@ -324,7 +301,7 @@ ALTER TABLE `tiposingredientes`
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables
@@ -356,18 +333,10 @@ ALTER TABLE `producto_ingrediente`
   ADD CONSTRAINT `producto_ingrediente_ibfk_2` FOREIGN KEY (`idIng`) REFERENCES `ingredientes` (`idIng`);
 
 --
--- Constraints for table `producto_ingredientes`
---
-ALTER TABLE `producto_ingredientes`
-  ADD CONSTRAINT `producto_ingredientes_ibfk_1` FOREIGN KEY (`idProducto`) REFERENCES `productos` (`idProducto`),
-  ADD CONSTRAINT `producto_ingredientes_ibfk_2` FOREIGN KEY (`idIng`) REFERENCES `ingredientes` (`idIng`);
-
---
 -- Constraints for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idRol`) REFERENCES `roles` (`idRol`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `usuarios_ibfk_2` FOREIGN KEY (`roleIdRol`) REFERENCES `roles` (`idRol`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idRol`) REFERENCES `roles` (`idRol`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

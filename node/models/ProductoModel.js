@@ -9,6 +9,22 @@ const ProductoModel = db.define('productos', {
         allowNull: false,
         primaryKey: true,
     },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    precio: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    categoria: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
     }, {timestamps: false}
 )
     // Otros atributos del producto

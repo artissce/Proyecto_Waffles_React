@@ -6,6 +6,38 @@ import RolModel from "../models/RolModel.js";
 // Antes de usar los modelos, sincronizarlos con la base de datos
 await UsuarioModel.sync();
 await RolModel.sync();
+
+export const authenticateUser = async (req, res) => {
+    try {
+        const { correo, contrasena } = req.body;
+
+        // Buscar el usuario por correo electrónico en la base de datos
+        const usuario = await UsuarioModel.findOne({ where: { correo: correo } });
+
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        // Verificar la contraseña del usuario
+        if (usuario.contrasena !== contrasena) {
+            return res.status(401).json({ message: 'Contraseña incorrecta' });
+        }
+
+        // Autenticación exitosa, devolver información del usuario
+        res.json({
+            message: 'Autenticación exitosa',
+            usuario: {
+                idUsuario: usuario.idUsuario,
+                nombre: usuario.nombre,
+                correo: usuario.correo,
+                idRol: usuario.idRol
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const getAllUsuario = async(req,res) => {
     try {
         const usuario= await UsuarioModel.findAll({

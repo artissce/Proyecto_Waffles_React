@@ -17,7 +17,7 @@ const PaqueteModel = db.define('paquetes',{
 }, {
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
-PaqueteModel.belongsTo(productos, {
+PaqueteModel.belongsTo(productos, {//CHECAR
     foreignKey: 'idProducto', // Nombre de la clave externa en la tabla Usuario
     onDelete: 'CASCADE', // Opcional: elimina automáticamente los roles asociados cuando se elimina un usuario
 });

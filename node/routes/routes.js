@@ -1,7 +1,7 @@
 import express from "express";
 import { createPedido, deletePedido, getAll, getPedido, updatePedido } from "../controllers/PedidoController.js";
 import { createRol, deleteRol, getAllRol, getRol, updateRol } from "../controllers/RolController.js";
-import { createUsuario, deleteUsuario, getAllUsuario, getUsuario, updateUsuario } from "../controllers/UsuarioController.js";
+import { createUsuario, deleteUsuario, getAllUsuario, getUsuario, updateUsuario, authenticateUser } from "../controllers/UsuarioController.js";
 import { createTipo, deleteTipo, getAllTipo, getTipo, updateTipo } from "../controllers/TipoIngredientesController.js";
 import { createIng, deleteIng, getAllIng, getIng, updateIng } from "../controllers/IngredienteController.js";
 import { createPI, deletePI, getAllPI, getPI, updatePI } from "../controllers/Producto_IngredienteController.js";
@@ -29,6 +29,7 @@ UsuarioRouter.get('/:idUsuario', getUsuario);
 UsuarioRouter.post('/', createUsuario);
 UsuarioRouter.put('/:idUsuario', updateUsuario);
 UsuarioRouter.delete('/:idUsuario', deleteUsuario);
+UsuarioRouter.post('/:correo',authenticateUser)//PENDIENTE
 
 const TipoRouter = express.Router();
 TipoRouter.get('/', getAllTipo);

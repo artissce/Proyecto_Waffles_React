@@ -21,17 +21,21 @@ const IngredientesModel= db.define('ingredientes',{
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
 
-IngredientesModel.belongsTo(TiposIngredientesModel, {
-  foreignKey: 'idTipo', // Nombre de la columna en UsuarioModel que actúa como clave foránea
-  as: 'tipo', // Alias para la asociación, opcional
-});
+  {/*
+    IngredientesModel.belongsTo(TiposIngredientesModel, {
+      foreignKey: 'idTipo', // Nombre de la columna en UsuarioModel que actúa como clave foránea
+      as: 'tipo', // Alias para la asociación, opcional
+    });
+    
+    IngredientesModel.belongsToMany(ProductoModel, {
+      through: Producto_IngredienteModel,
+      foreignKey: 'idIng',
+      otherKey: 'idProducto',
+      as: 'productos',
+    });*/
 
-IngredientesModel.belongsToMany(ProductoModel, {
-  through: Producto_IngredienteModel,
-  foreignKey: 'idIng',
-  otherKey: 'idProducto',
-  as: 'productos',
-});
+  }
+
  
 
 export default IngredientesModel;
