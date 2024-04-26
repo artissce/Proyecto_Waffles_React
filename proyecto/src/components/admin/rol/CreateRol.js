@@ -2,30 +2,30 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const URI = 'http://localhost:8000/roles/'
+const URI = 'http://localhost:8000/usuarios/'
 
 
-const CreateRol = ()=>{
-    const [nombreRol,setNombreRol]=useState('')
+const CreateUser = ()=>{
+    const [nombreUser,setNombreUser]=useState('')
 
     const navigate = useNavigate()
 
     //guardar
     const store = async(e)=>{
         e.preventDefault()
-        await axios.post(URI,{nombreRol:nombreRol})
-        navigate('/roles')
+        await axios.post(URI,{nombreUser:nombreUser})
+        navigate('/usuarios')
     }
 
     return(
         <div>
-            <h1>Create rol</h1>
+            <h1>Create User</h1>
             <form onSubmit={store}>
                 <div className='mb-3'>
-                    <label className='form=label'>Rol</label>
+                    <label className='form=label'>User</label>
                     <input 
-                        value={nombreRol} onChange={(e)=>setNombreRol(e.target.value)} 
-                        type="text" className='form-control'/>
+                        value={nombreUser} onChange={(e)=>setNombreUser(e.target.value)} 
+                        type="text" className='form-contUser'/>
                 </div>
                     
                 <button type="submit" className='btn btn-primary'>Enviar</button>
@@ -35,4 +35,4 @@ const CreateRol = ()=>{
     )
 }
 
-export default CreateRol 
+export default CreateUser 
