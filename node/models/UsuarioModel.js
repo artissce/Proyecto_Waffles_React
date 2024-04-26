@@ -28,10 +28,7 @@ const UsuarioModel= db.define('usuarios',{
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
 
-  UsuarioModel.belongsTo(RolModel, {
-    foreignKey: 'idRol', // Nombre de la columna en UsuarioModel que actúa como clave foránea
-    as: 'rol', // Alias para la asociación, opcional
-  });
+
  
 
 export default UsuarioModel;

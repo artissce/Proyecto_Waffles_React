@@ -9,15 +9,16 @@ const ProductoModel = db.define('productos', {
         allowNull: false,
         primaryKey: true,
     },
+    }, {timestamps: false}
+)
     // Otros atributos del producto
-});
 
 // Definir la asociación muchos a muchos con Ingredientes
-ProductoModel.belongsToMany(IngredientesModel, {
+/*ProductoModel.belongsToMany(IngredientesModel, {
     through: Producto_IngredienteModel, // Tabla de enlace
     foreignKey: 'idProducto', // Clave foránea en la tabla producto_ingrediente que apunta a Productos
     otherKey: 'idIng', // Clave foránea en la tabla producto_ingrediente que apunta a Ingredientes
     as: 'ingredientes', // Alias para la relación, opcional
-});
+});*/
 
 export default ProductoModel;

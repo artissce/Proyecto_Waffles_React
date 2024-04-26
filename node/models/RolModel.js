@@ -4,7 +4,7 @@
 //importar la conexion a la db
 import db from "../database/db.js"
 import {DataTypes} from "sequelize";//prueba de que puedo mandar push
-
+//import UsuarioModel from './UsuarioModel.js'
 const RolModel= db.define('roles',{
     idRol: { 
         type: DataTypes.INTEGER,
@@ -15,4 +15,5 @@ const RolModel= db.define('roles',{
     }, {timestamps: false, // Evita la creación automática de createdAt y updatedAt
 })
 
+//RolModel.hasMany(UsuarioModel)
 export default RolModel;
