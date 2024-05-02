@@ -20,6 +20,21 @@ RolModel.hasMany(UsuarioModel, {
   as: 'usuarios',
 });
 
+TiposIngredientesModel.belongsToMany(IngredientesModel,{
+  as:"assignedIngs",
+  through: "TI_I",//tabla intermedia
+  foreignKey:"idTipo",
+  otherKey:"idIng",
+  timestamps:false
+})
+
+IngredientesModel.belongsToMany(TiposIngredientesModel,{
+  as:"assignedTipo",
+  through: "TI_I",//tabla intermedia
+  foreignKey:"idIng",
+  otherKey:"idTipo",
+  timestamps:false
+})
 /*
 TiposIngredientesModel.belongsToMany(IngredientesModel, {
   through: 'TipoIngredientes_Ingredientes', // Nombre de la tabla intermedia

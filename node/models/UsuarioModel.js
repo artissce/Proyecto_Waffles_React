@@ -27,8 +27,6 @@ const UsuarioModel= db.define('usuarios',{
     }, {
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
-
-
  
 
 export default UsuarioModel;

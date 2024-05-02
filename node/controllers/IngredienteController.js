@@ -54,7 +54,7 @@ export const createIng = async (req, res) => {
       });
   
       // Asociar el rol al Ing usando setRol
-      await newIng.setTipo(tipoExistente);
+      await newIng.addAssignedTipo(tipoExistente);
   
       res.json({ message: "Registro de Ing correctamente", newIng: {...newIng.toJSON(), idTipo: idTipo} });
     } catch (error) {
