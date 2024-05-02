@@ -35,6 +35,22 @@ IngredientesModel.belongsToMany(TiposIngredientesModel,{
   otherKey:"idTipo",
   timestamps:false
 })
+
+IngredientesModel.belongsToMany(ProductoModel,{
+  as:"assignedProducto",
+  through: "producto_ingrediente",
+  foreignKey:"idIng",
+  otherKey:"idProducto",
+  timestamps:false
+})
+
+ProductoModel.belongsToMany(IngredientesModel,{
+  as:"assignedIng",
+  through: "producto_ingrediente",
+  foreignKey:"idProducto",
+  otherKey:"idIng",
+  timestamps:false
+})
 /*
 TiposIngredientesModel.belongsToMany(IngredientesModel, {
   through: 'TipoIngredientes_Ingredientes', // Nombre de la tabla intermedia
@@ -90,7 +106,9 @@ app.use('/roles', Routers.RolRouter);
 app.use('/usuarios', Routers.UsuarioRouter);
 app.use('/tipo', Routers.TipoRouter);
 app.use('/ing', Routers.IngRouter);
-app.use('/pi', Routers.PIRouter);
+app.use('/producto',Routers.ProRouter);
+
+//app.use('/pi', Routers.PIRouter);
 (async () => {
   try {
     await db.authenticate();

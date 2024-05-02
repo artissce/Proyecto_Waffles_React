@@ -31,7 +31,7 @@ export const createRol = async(req,res) => {
     try {
        const newRol = {
             nombreRol: req.body.nombreRol,
-          };
+        };
         await RolModel.create(newRol)
         res.json({"message":"Registro de rol correctamente"})
     } catch (error) {

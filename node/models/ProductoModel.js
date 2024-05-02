@@ -6,8 +6,9 @@ import IngredientesModel from "./IngredientesModel.js";
 const ProductoModel = db.define('productos', {
     idProducto: {
         type: DataTypes.INTEGER,
+        autoIncrement: true, // Habilitar auto-incremento
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
     },
     nombre: {
         type: DataTypes.STRING,
@@ -25,16 +26,12 @@ const ProductoModel = db.define('productos', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
-    }, {timestamps: false}
-)
-    // Otros atributos del producto
+    cantIng:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0, // Valor por defecto si no se proporciona
+    }
+}, { timestamps: false });
 
-// Definir la asociación muchos a muchos con Ingredientes
-/*ProductoModel.belongsToMany(IngredientesModel, {
-    through: Producto_IngredienteModel, // Tabla de enlace
-    foreignKey: 'idProducto', // Clave foránea en la tabla producto_ingrediente que apunta a Productos
-    otherKey: 'idIng', // Clave foránea en la tabla producto_ingrediente que apunta a Ingredientes
-    as: 'ingredientes', // Alias para la relación, opcional
-});*/
 
 export default ProductoModel;

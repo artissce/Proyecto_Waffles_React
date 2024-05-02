@@ -4,7 +4,8 @@ import { createRol, deleteRol, getAllRol, getRol, updateRol } from "../controlle
 import { createUsuario, deleteUsuario, getAllUsuario, getUsuario, updateUsuario, authenticateUser } from "../controllers/UsuarioController.js";
 import { createTipo, deleteTipo, getAllTipo, getTipo, updateTipo } from "../controllers/TipoIngredientesController.js";
 import { createIng, deleteIng, getAllIng, getIng, updateIng } from "../controllers/IngredienteController.js";
-import { createPI, deletePI, getAllPI, getPI, updatePI } from "../controllers/Producto_IngredienteController.js";
+//import { createPI, deletePI, getAllPI, getPI, updatePI } from "../controllers/Producto_IngredienteController.js";
+import { createPro,deletePro,getAllPro,getPro,updatePro } from "../controllers/ProductoController.js";
 
 
 const PedidoRouter = express.Router();
@@ -44,13 +45,20 @@ IngRouter.get('/:idIng', getIng);
 IngRouter.post('/', createIng);
 IngRouter.put('/:idIng', updateIng);
 IngRouter.delete('/:idIng', deleteIng);
-
+/*
 const PIRouter = express.Router();
 PIRouter.get('/', getAllPI);
 PIRouter.get('/:idProducto/:idIng', getPI);
 PIRouter.post('/', createPI);
 PIRouter.put('/:idProducto/:idIng', updatePI);
-PIRouter.delete('/:idProducto/:idIng', deletePI);
+PIRouter.delete('/:idProducto/:idIng', deletePI);*/
+
+const ProRouter = express.Router();
+ProRouter.get('/', getAllPro);
+ProRouter.get('/:idPro', getPro);
+ProRouter.post('/', createPro);
+ProRouter.put('/:idIng', updatePro);
+ProRouter.delete('/:idPro', deletePro);
 
 // Exportar los routers
 export const Routers = {
@@ -59,5 +67,6 @@ export const Routers = {
   UsuarioRouter,
   TipoRouter,
   IngRouter,
-  PIRouter,
+  ProRouter
+  //PIRouter,
 };
