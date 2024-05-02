@@ -6,7 +6,7 @@ import { Home } from './components/home/Home';
 import { useState } from 'react';
 import { HomeAdmin } from './components/admin/HomeAdmin';
 import React from 'react';
-import { BrowserRouter, Route,Router,Switch } from 'react-router-dom';
+//import { Switch, BrowserRouter, Route,Router } from 'react-router-dom';
 
 function App() {
   const [usuario,setUsuario]=useState([])//arreglo vacio
@@ -15,15 +15,7 @@ function App() {
       {
         /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/><HomeAdmin/>*/
       }
-      <Router>
-            <Switch>
-                <Route path="/admin/HomeAdmin" component={HomeAdmin} />
-                <Route path="/home/Home" component={Home} />
-                <Route path="/">
-                    <Formulario />
-                </Route>
-            </Switch>
-        </Router>
+      <HomeAdmin/>
     
       
    </div>

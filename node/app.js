@@ -15,7 +15,11 @@ UsuarioModel.belongsTo(RolModel, {
     foreignKey: 'idRol',
     as: 'rol',
 });
-//RolModel.hasMany(UsuarioModel);
+RolModel.hasMany(UsuarioModel, {
+  foreignKey: 'idRol',
+  as: 'usuarios',
+});
+
 /*
 TiposIngredientesModel.belongsToMany(IngredientesModel, {
   through: 'TipoIngredientes_Ingredientes', // Nombre de la tabla intermedia
