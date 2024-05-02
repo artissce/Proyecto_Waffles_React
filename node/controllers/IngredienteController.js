@@ -74,7 +74,22 @@ export const updateIng = async(req,res) => {
         if (updatedCount === 0) {
             return res.status(404).json({ message: 'Ing not found' }); // Handle no record found
         }
+        // Obtener el ingrediente actualizado
+        const updatedIngrediente = await IngredientesModel.findByPk(req.params.idIng);
 
+        // Actualizar la relación con TiposIngredientesModel (TI_I)
+        if (updatedIngrediente && idTipo) {
+            const tipoExistente = await TiposIngredientesModel.findByPk(idTipo);
+            if (!tipoExistente) {
+                return res.status(404).json({ message: 'Tipo de ingrediente no encontrado' });
+            }
+
+            // Eliminar todas las relaciones anteriores
+            await updatedIngrediente.addAssignedTipo([]);
+
+            // Establecer la nueva relación con el tipo de ingrediente actualizado
+            await updatedIngrediente.addAssignedTipo([tipoExistente]);
+        }
         res.json({"message":"Actualizacion de Ing correcta"})
     } catch (error) {
         res.json({message:error.message})
