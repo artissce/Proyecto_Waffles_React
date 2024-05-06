@@ -77,6 +77,8 @@ export const createPaquete = async (req, res) => {
 //actualizar un registro
 export const updatePaquete = async (req, res) => {
     try {
+
+        
         const { nombre, precio, descripcion, cantidadProducto, productos } = req.body;
 
         // Construir el objeto de datos a actualizar para el paquete
@@ -87,7 +89,7 @@ export const updatePaquete = async (req, res) => {
         if (cantidadProducto) updatedData.cantidadProducto = cantidadProducto;
 
         // Realizar la actualización en la base de datos para el paquete
-        const [updatedCount] = await PaqueteModel.update(updatedData, {
+        const [updatedCount] = await PaqueteModel.update(req.body, {
             where: { idPaquete: req.params.idPaquete }
         });
 
