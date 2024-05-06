@@ -1,8 +1,6 @@
 // En el modelo de Productos
 import db from "../database/db.js";
 import { DataTypes } from "sequelize";
-import Producto_IngredienteModel from "./Producto_IngredienteModel.js";
-import IngredientesModel from "./IngredientesModel.js";
 const ProductoModel = db.define('productos', {
     idProducto: {
         type: DataTypes.INTEGER,

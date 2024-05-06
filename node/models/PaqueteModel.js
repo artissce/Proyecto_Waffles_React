@@ -7,18 +7,16 @@ const PaqueteModel = db.define('paquetes',{
     idPaquete: { // Assuming your primary key is named 'idPedido'
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: false, // Disable auto-increment
+        autoIncrement: true, // Disable auto-increment
+        allowNull:false
       },
-    nombre: { type: DataTypes.STRING},//define el tipo
-    precio: { type: DataTypes.DECIMAL},//define el tipo
-    descripcion: { type: DataTypes.CITEXT},//define el tipo
+    nombre: { type: DataTypes.STRING,allowNull:false},//define el tipo
+    precio: { type: DataTypes.DECIMAL,allowNull:false},//define el tipo
+    descripcion: { type: DataTypes.CITEXT,allowNull:false},//define el tipo
     //idProducto:{ type: DataTypes.INTEGER},
-    cantidadProducto:{ type: DataTypes.INTEGER}
+    cantidadProducto:{ type: DataTypes.INTEGER,allowNull:false}
 }, {
     timestamps: false, // Evita la creación automática de createdAt y updatedAt
   })
-PaqueteModel.belongsTo(productos, {//CHECAR
-    foreignKey: 'idProducto', // Nombre de la clave externa en la tabla Usuario
-    onDelete: 'CASCADE', // Opcional: elimina automáticamente los roles asociados cuando se elimina un usuario
-});
+
 export default PaqueteModel;

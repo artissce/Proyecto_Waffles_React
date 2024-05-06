@@ -9,7 +9,7 @@ import TiposIngredientesModel from "./models/TiposIngredientesModel.js";
 import IngredientesModel from "./models/IngredientesModel.js";
 import Producto_IngredienteModel from "./models/Producto_IngredienteModel.js";
 import ProductoModel from "./models/ProductoModel.js";
-
+import PaqueteModel from "./models/PaqueteModel.js"
 // Definir las relaciones entre los modelos
 UsuarioModel.belongsTo(RolModel, {
     foreignKey: 'idRol',
@@ -51,49 +51,24 @@ ProductoModel.belongsToMany(IngredientesModel,{
   otherKey:"idIng",
   timestamps:false
 })
-/*
-TiposIngredientesModel.belongsToMany(IngredientesModel, {
-  through: 'TipoIngredientes_Ingredientes', // Nombre de la tabla intermedia
-  foreignKey: 'idTipo', // Clave foránea en la tabla intermedia que apunta a TipoIngredientes
-  otherKey: 'idIng', // Clave foránea en la tabla intermedia que apunta a Ingredientes
-  as: 'ingredientes', // Alias para la relación, opcionaltipoingredientes_ingredientes
-});
 
-IngredientesModel.belongsToMany(TiposIngredientesModel, {
-  //through: 'TipoIngredientes_Ingredientes',
-  foreignKey: 'idIng',
-  //otherKey: 'idTipo',
-  as: 'tiposIngredientes',
-});
-
-IngredientesModel.belongsToMany(Producto_IngredienteModel, {//modificar ^
-  through: 'Ingredientes_Producto_Ingrediente',
-  foreignKey: 'idIng',
-  otherKey: 'idProducto',
-  as: 'productosI',
-});
-
-Producto_IngredienteModel.belongsToMany(IngredientesModel, {//modificar ^
-  through: 'Ingredientes_Producto_Ingrediente',
+// En ProductoModel.js
+ProductoModel.belongsToMany(PaqueteModel, {
+  as:"assignedPaq",
+  through: 'producto_paquete',
   foreignKey: 'idProducto',
-  otherKey: 'idIng',
-  as: 'ingredientes', // Cambiado a un alias único
+  otherKey:"idPaquete",
+  timestamps:false
 });
 
-Producto_IngredienteModel.belongsToMany(ProductoModel, {//modificar *
-  through: 'Producto_Ingrediente_Producto',
-  foreignKey: 'idPI', // Clave foránea en la tabla intermedia que apunta a Producto_Ingrediente
-  otherKey: 'idProducto', // Clave foránea en la tabla intermedia que apunta a Producto
-  as: 'productosP',
+// En PaqueteModel.js
+PaqueteModel.belongsToMany(ProductoModel, {
+  as:"assignedPro",
+  through: 'producto_paquete',
+  foreignKey: 'idPaquete',
+  otherKey:'idProducto',
+  timestamps:false
 });
-
-ProductoModel.belongsToMany(Producto_IngredienteModel, {//modficar *
-  through: 'Producto_Ingrediente_Producto',
-  foreignKey: 'idProducto',
-  otherKey: 'idPI',
-  as: 'ingredientesProducto', // Cambiado a un alias único
-});*/
-
 
 
 const app = express()
@@ -107,6 +82,7 @@ app.use('/usuarios', Routers.UsuarioRouter);
 app.use('/tipo', Routers.TipoRouter);
 app.use('/ing', Routers.IngRouter);
 app.use('/producto',Routers.ProRouter);
+app.use('/paquete',Routers.PaqRouter);
 
 //app.use('/pi', Routers.PIRouter);
 (async () => {

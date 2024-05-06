@@ -6,6 +6,7 @@ import { createTipo, deleteTipo, getAllTipo, getTipo, updateTipo } from "../cont
 import { createIng, deleteIng, getAllIng, getIng, updateIng } from "../controllers/IngredienteController.js";
 //import { createPI, deletePI, getAllPI, getPI, updatePI } from "../controllers/Producto_IngredienteController.js";
 import { createPro,deletePro,getAllPro,getPro,updatePro } from "../controllers/ProductoController.js";
+import { createPaquete,deletePaquete,getAllPaquete,getPaquete,updatePaquete } from "../controllers/PaqueteController.js";
 
 
 const PedidoRouter = express.Router();
@@ -60,6 +61,12 @@ ProRouter.post('/', createPro);
 ProRouter.put('/:idProducto', updatePro);
 ProRouter.delete('/:idProducto', deletePro);
 
+const PaqRouter = express.Router();
+PaqRouter.get('/', getAllPaquete);
+PaqRouter.get('/:idPaquete', getPaquete);
+PaqRouter.post('/', createPaquete);
+PaqRouter.put('/:idPaquete', updatePaquete);
+PaqRouter.delete('/:idPaquete', deletePaquete);
 // Exportar los routers
 export const Routers = {
   PedidoRouter,
@@ -67,6 +74,7 @@ export const Routers = {
   UsuarioRouter,
   TipoRouter,
   IngRouter,
-  ProRouter
+  ProRouter,
+  PaqRouter
   //PIRouter,
 };
