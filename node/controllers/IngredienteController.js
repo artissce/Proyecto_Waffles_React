@@ -67,6 +67,7 @@ export const createIng = async (req, res) => {
 //actualizar un registro
 export const updateIng = async(req,res) => {
     try {
+        const { idTipo } = req.body; // Nuevo ID de tipo de ingrediente, si se proporciona
         const [updatedCount]=await IngredientesModel.update(req.body,{
             where:{idIng: req.params.idIng}
         })
@@ -85,10 +86,10 @@ export const updateIng = async(req,res) => {
             }
 
             // Eliminar todas las relaciones anteriores
-            await updatedIngrediente.addAssignedTipo([]);
+            await updatedIngrediente.setAssignedTipo([]);
 
             // Establecer la nueva relación con el tipo de ingrediente actualizado
-            await updatedIngrediente.addAssignedTipo([tipoExistente]);
+            await updatedIngrediente.setAssignedTipo([tipoExistente]);
         }
         res.json({"message":"Actualizacion de Ing correcta"})
     } catch (error) {
