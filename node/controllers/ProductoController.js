@@ -22,13 +22,14 @@ export const getAllPro = async(req,res) => {
 //mostrar un registro
 export const getPro = async(req,res) => {
     try {
+        console.log("ID del producto:", req.params.idProducto); // Agregar este log para depurar
         const pro = await ProductoModel.findAll({
             where:{
                 idProducto:req.params.idProducto
             },
-            attributes: ['idProducto', 'nombre', 'precio','categoria','descripcion'],
+            attributes: ['idProducto', 'nombre', 'precio','categoria','descripcion','cantIng'],
         })
-        res.json(idProducto[0])
+        res.json(pro[0])
     } catch (error) {
         res.json({message:error.message})
     }
@@ -86,32 +87,66 @@ export const createPro = async (req, res) => {
   
 
 //actualizar un registro
-export const updatePro = async(req,res) => {
+export const updatePro = async (req, res) => {
     try {
-        const [updatedCount]=await IngredientesModel.update(req.body,{
-            where:{idIng: req.params.idIng}
-        })
+        const { idProducto } = req.params; // Obtener el ID del producto a actualizar
+        const { nombre, precio, categoria, descripcion, cantIng, ingredientes } = req.body;
 
-        if (updatedCount === 0) {
-            return res.status(404).json({ message: 'Ing not found' }); // Handle no record found
+        // Verificar que se haya proporcionado una lista de ingredientes
+        if (!ingredientes || !Array.isArray(ingredientes) || ingredientes.length === 0) {
+            return res.status(400).json({ message: "La lista de ingredientes es requerida y debe ser un arreglo no vacío." });
         }
 
-        res.json({"message":"Actualizacion de Ing correcta"})
+        // Actualizar el producto
+        const [updatedCount] = await ProductoModel.update({
+            nombre,
+            precio,
+            categoria,
+            descripcion,
+            cantIng,
+        }, {
+            where: { idProducto },
+        });
+
+        // Verificar si el producto se actualizó correctamente
+        if (updatedCount === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+
+        // Eliminar todas las asociaciones anteriores de ingredientes
+        await Producto_IngredienteModel.destroy({
+            where: { idProducto },
+        });
+
+        // Crear las nuevas asociaciones de ingredientes
+        for (let i = 0; i < cantIng; i++) {
+            const ingredienteId = ingredientes[i % ingredientes.length];
+            const ingrediente = await IngredientesModel.findByPk(ingredienteId);
+            if (ingrediente) {
+                await Producto_IngredienteModel.create({
+                    idProducto,
+                    idIng: ingredienteId,
+                });
+            }
+        }
+
+        res.json({ message: "Actualización de Producto correctamente" });
     } catch (error) {
-        res.json({message:error.message})
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 //elminar un registro
 export const deletePro= async(req,res) => {
     try {
-        const idIng = req.params.idIng; // Obtener el ID del pedido de los parámetros de la solicitud
-        const resultado = await IngredientesModel.destroy({
-            where: { idIng: idIng } // Especificar la condición de eliminación
+        const idProducto = req.params.idProducto; // Obtener el ID del pedido de los parámetros de la solicitud
+        const resultado = await ProductoModel.destroy({
+            where: { idProducto: idProducto } // Especificar la condición de eliminación
         });
         if (resultado === 1) {
-            res.json({ "message": "Borrado de Ing correcto" });
+            res.status(200).json({ message: "Borrado de producto correcto" });
         } else {
-            res.status(404).json({ "message": "Ing no encontrado o no eliminado" });
+            res.status(404).json({ "message": "Producto no encontrado o no eliminado" });
         }
     } catch (error) {
         res.json({ message: error.message });

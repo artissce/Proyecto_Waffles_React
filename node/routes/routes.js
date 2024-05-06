@@ -55,10 +55,10 @@ PIRouter.delete('/:idProducto/:idIng', deletePI);*/
 
 const ProRouter = express.Router();
 ProRouter.get('/', getAllPro);
-ProRouter.get('/:idPro', getPro);
+ProRouter.get('/:idProducto', getPro);
 ProRouter.post('/', createPro);
-ProRouter.put('/:idIng', updatePro);
-ProRouter.delete('/:idPro', deletePro);
+ProRouter.put('/:idProducto', updatePro);
+ProRouter.delete('/:idProducto', deletePro);
 
 // Exportar los routers
 export const Routers = {
