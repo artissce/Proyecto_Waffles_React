@@ -10,6 +10,7 @@ import IngredientesModel from "./models/IngredientesModel.js";
 import Producto_IngredienteModel from "./models/Producto_IngredienteModel.js";
 import ProductoModel from "./models/ProductoModel.js";
 import PaqueteModel from "./models/PaqueteModel.js"
+import PedidoModel from "./models/PedidoModel.js";
 // Definir las relaciones entre los modelos
 UsuarioModel.belongsTo(RolModel, {
     foreignKey: 'idRol',
@@ -70,7 +71,23 @@ PaqueteModel.belongsToMany(ProductoModel, {
   timestamps:false
 });
 
+// En PedidoModel.js
+PedidoModel.belongsToMany(PaqueteModel, {
+  as:"assignedPaq",
+  through: 'paquete_pedido',
+  foreignKey: 'idPedido',
+  otherKey:"idPaquete",
+  timestamps:false
+});
 
+// En PaqueteModel.js
+PaqueteModel.belongsToMany(PedidoModel, {
+  as:"assignedPed",
+  through: 'paquete_pedido',
+  foreignKey: 'idPaquete',
+  otherKey:'idPedido',
+  timestamps:false
+});
 const app = express()
 app.use(cors())
 app.use(express.json())

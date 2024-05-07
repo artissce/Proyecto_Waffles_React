@@ -2,17 +2,21 @@ import PedidoModel from "../models/PedidoModel.js";
 
 /*METODOS PARA EL CRUD */
 
-//mostrar todos los registros
-export const getAll = async(req,res) => {
+import PaqueteModel from "../models/PaqueteModel.js"; // Importa el modelo de PaqueteModel.js
+
+// Mostrar todos los registros de pedidos
+// Mostrar todos los registros de pedidos con los paquetes relacionados
+export const getAllPedidos = async (req, res) => {
     try {
-        const pedido= await PedidoModel.findAll({
-            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'paquete', 'estado'],
-          });
-        res.json(pedido)
+        const pedidos = await PedidoModel.findAll({
+            include: { model: PaqueteModel, as: "assignedPaq" }, // Utiliza el alias "assignedPaq" para los paquetes
+        });
+        res.json(pedidos);
     } catch (error) {
-        res.json({message:error.message})
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 //mostrar un registro
 export const getPedido = async(req,res) => {
     try {
