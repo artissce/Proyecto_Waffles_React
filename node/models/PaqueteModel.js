@@ -11,7 +11,7 @@ const PaqueteModel = db.define('paquetes',{
         allowNull:false
       },
     nombre: { type: DataTypes.STRING,allowNull:false},//define el tipo
-    precio: { type: DataTypes.DECIMAL,allowNull:false},//define el tipo
+    precio: { type: DataTypes.FLOAT,allowNull:false},//define el tipo
     descripcion: { type: DataTypes.CITEXT,allowNull:false},//define el tipo
     //idProducto:{ type: DataTypes.INTEGER},
     cantidadProducto:{ type: DataTypes.INTEGER,allowNull:false}
