@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'; // Importa BrowserRouter aquí
 import './App.css';
 import {Formulario} from './components/login/Formulario'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,16 +10,27 @@ import React from 'react';
 //import { Switch, BrowserRouter, Route,Router } from 'react-router-dom';
 
 function App() {
-  const [usuario,setUsuario]=useState([])//arreglo vacio
+  const [usuario, setUsuario] = useState(null);
+  const handleLogin = (user) => {
+    // Actualizar el estado del componente padre con el usuario autenticado
+    setUsuario(user);
+  };
   return (
-    <div className="App">
+   /* <div className="App">
       {
-        /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/><HomeAdmin/>*/
+        /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/><HomeAdmin/>
       }
       <HomeAdmin/>
     
       
-   </div>
+   </div>*/
+   <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Formulario />} />
+        <Route path="/admin/*" element={<HomeAdmin />} />
+        <Route path="/home/*" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

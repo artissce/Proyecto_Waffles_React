@@ -25,7 +25,8 @@ UsuarioRouter.get('/:idUsuario', getUsuario);
 UsuarioRouter.post('/', createUsuario);
 UsuarioRouter.put('/:idUsuario', updateUsuario);
 UsuarioRouter.delete('/:idUsuario', deleteUsuario);
-UsuarioRouter.post('/:correo',authenticateUser)//PENDIENTE
+UsuarioRouter.post('/login', authenticateUser); // Usando POST para autenticación en '/login'
+
 
 const TipoRouter = express.Router();
 TipoRouter.get('/', getAllTipo);
