@@ -16,7 +16,7 @@ const EditTI = ()=>{
         console.log("URL de la solicitud PUT:", url);
         try {
             await axios.put(URI+ idTipo, { nombreTipo:nombreTipo });
-            navigate('/tipo'); // Navegar de regreso al listado después de la actualización
+            navigate('/admin/tipo'); // Navegar de regreso al listado después de la actualización
         } catch (error) {
             console.error("Error al actualizar el tipo:", error);
         }

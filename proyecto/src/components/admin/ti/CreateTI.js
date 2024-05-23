@@ -17,7 +17,7 @@ const CreateTI = ()=>{
                 nombreTipo: nombreTipo
             };
             await axios.post(URI, tipo);
-            navigate('/tipo');
+            navigate('/admin/tipo');
         } catch (error) {
             console.error('Error al crear el tipo:', error);
         }

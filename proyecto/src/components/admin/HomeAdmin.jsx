@@ -8,6 +8,9 @@ import EditUser from "./user/EditUser";
 import CreateTI from "./ti/CreateTI";
 import ShowTI from "./ti/ShowTI";
 import EditTI from "./ti/EditTI";
+import ShowIng from './ing/ShowIng';
+import CreateIng from './ing/CreateIng';
+import EditIng from './ing/EditIng';
 export function HomeAdmin(){
     return(
         <div>
@@ -24,6 +27,10 @@ export function HomeAdmin(){
             <Route path="tipo" element={<ShowTI />} />
             <Route path="tipo/create" element={<CreateTI />} />
             <Route path="tipo/edit/:idTipo" element={<EditTI/>} />
+
+            <Route path="ing" element={<ShowIng />} />
+            <Route path="ing/create" element={<CreateIng />} />
+            <Route path="ing/edit/:idIng" element={<EditIng/>} />
          </Routes>
         </div>
     )
