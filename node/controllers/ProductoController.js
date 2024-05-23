@@ -19,6 +19,24 @@ export const getAllPro = async(req,res) => {
         res.json({message:error.message})
     }
 }
+// Método para obtener todos los productos con sus ingredientes
+export const getProWithIngredients = async (req, res) => {
+    try {
+      // Obtén todos los productos con sus ingredientes asociados
+      const productos = await ProductoModel.findAll({
+        include: {
+          model: Producto_IngredienteModel, // Asocia el modelo de Producto_Ingrediente
+          attributes: [], // No necesitas mostrar los atributos de Producto_Ingrediente
+        },
+        attributes: ['idProducto', 'nombre', 'precio', 'categoria', 'descripcion', 'cantIng'], // Atributos de Producto que deseas mostrar
+      });
+  
+      res.json(productos);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
 //mostrar un registro
 export const getPro = async(req,res) => {
     try {

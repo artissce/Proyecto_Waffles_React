@@ -2,28 +2,45 @@ import Producto_IngredienteModel from "../models/Producto_IngredienteModel.js";
 /*METODOS PARA EL CRUD */
 
 //mostrar todos los registros
-export const getAllPI = async(req,res) => {
+const Op = Sequelize.Op;
+
+// Mostrar todos los registros con información de ingredientes y productos
+export const getAllPI = async (req, res) => {
     try {
-        const PI= await Producto_IngredienteModel.findAll({
-            attributes: ['idProducto', 'idIng'],
-          });
-        res.json(PI)
+        const PI = await Producto_IngredienteModel.findAll({
+            include: [
+                {
+                    model: ProductoModel,
+                    attributes: ['idProducto', 'nombre'],
+                },
+                {
+                    model: IngredienteModel,
+                    attributes: ['idIng', 'nombre'],
+                },
+            ],
+        });
+        res.json(PI);
     } catch (error) {
-        res.json({message:error.message})
+        res.status(500).json({ message: error.message });
     }
 }
 //mostrar un registro
-export const getPI = async(req,res) => {
+export const getPI = async (req, res) => {
     try {
         const PI = await Producto_IngredienteModel.findAll({
-            where:{
-                idPI:req.params.idPI
+            where: {
+                idProducto: req.params.idProducto,
             },
-            attributes: ['idProducto', 'idIng'],
-        })
-        res.json(PI[0])
+            include: [
+                {
+                    model: IngredienteModel,
+                    attributes: ['idIng', 'nombre'],
+                },
+            ],
+        });
+        res.json(PI);
     } catch (error) {
-        res.json({message:error.message})
+        res.status(500).json({ message: error.message });
     }
 }
 //crear un registro

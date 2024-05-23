@@ -11,6 +11,11 @@ import EditTI from "./ti/EditTI";
 import ShowIng from './ing/ShowIng';
 import CreateIng from './ing/CreateIng';
 import EditIng from './ing/EditIng';
+import CreatePro from './product/CreatePro';
+import EditPro from './product/EditPro';
+import ShowPro from './product/ShowPro';
+
+
 export function HomeAdmin(){
     return(
         <div>
@@ -31,6 +36,10 @@ export function HomeAdmin(){
             <Route path="ing" element={<ShowIng />} />
             <Route path="ing/create" element={<CreateIng />} />
             <Route path="ing/edit/:idIng" element={<EditIng/>} />
+
+            <Route path="producto" element={<ShowPro />} />
+            <Route path="producto/create" element={<CreatePro />} />
+            <Route path="producto/edit/:idProducto" element={<EditPro/>} />
          </Routes>
         </div>
     )
