@@ -34,12 +34,14 @@ body {
   width: 100%;
   height: 100vh;
   background-image: linear-gradient(
-      to bottom right,
-      #9664bb 0%,
-      #6f37a4 20%,
-      #95289b 40%,
-      #fe7098 60%,
-      #f973d2 80%
+      135deg,
+      #fa6868 0%,    /* Rojo */
+      #f1b171 17%,   /* Naranja */
+      #f5ef76 34%,   /* Amarillo */
+      #55ff9f 51%,   /* Verde */
+      #4e80f5 68%,   /* Azul */
+      #a354dc 85%,   /* Índigo */
+      #c76cee 100%   /* Violeta */
   );
   background-size: 200% 200%;
   animation: movimiento 5s linear infinite alternate;
@@ -54,4 +56,3 @@ body {
       background-position: 100% 100%;
   }
 }
-
