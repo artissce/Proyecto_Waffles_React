@@ -14,6 +14,9 @@ import EditIng from './ing/EditIng';
 import CreatePro from './product/CreatePro';
 import EditPro from './product/EditPro';
 import ShowPro from './product/ShowPro';
+import ShowPaq from './paq/ShowPaq';
+import CreatePaq from './paq/CreatePaq';
+import EditPaq from './paq/EditPaq';
 
 
 export function HomeAdmin(){
@@ -40,6 +43,10 @@ export function HomeAdmin(){
             <Route path="producto" element={<ShowPro />} />
             <Route path="producto/create" element={<CreatePro />} />
             <Route path="producto/edit/:idProducto" element={<EditPro/>} />
+
+            <Route path="paquete" element={<ShowPaq />} />
+            <Route path="paquete/create" element={<CreatePaq />} />
+            <Route path="paquete/edit/:idPaquete" element={<EditPaq/>} />
          </Routes>
         </div>
     )
