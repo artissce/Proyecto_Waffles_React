@@ -2,167 +2,151 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const URI = 'http://localhost:8000/paquete/';
-const URI_PRODUCTOS = 'http://localhost:8000/producto/';
+const URI_PAQ = 'http://localhost:8000/paquete/';
+const URI_PROD = 'http://localhost:8000/producto/';
 
 const EditPaq = () => {
+    const { idPaquete } = useParams();
     const [nombre, setNombre] = useState('');
     const [precio, setPrecio] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [cantidadProducto, setCantidadProducto] = useState(0);
     const [productos, setProductos] = useState([]);
-    const [selectedProductos, setSelectedProductos] = useState([]);
+    const [productosList, setProductosList] = useState([]);
     const navigate = useNavigate();
-    const { idPaquete } = useParams();
 
     useEffect(() => {
         getPaqueteById();
-        getProductos();
+        getProductosList();
     }, []);
 
     const getPaqueteById = async () => {
         try {
-            const res = await axios.get(`${URI}${idPaquete}`);
+            console.log(`Fetching paquete with id: ${idPaquete}`);
+            const res = await axios.get(`${URI_PAQ}${idPaquete}`);
             const paquete = res.data;
+            console.log("Paquete obtenido:", paquete);
             setNombre(paquete.nombre);
             setPrecio(paquete.precio);
             setDescripcion(paquete.descripcion);
-            setCantidadProducto(paquete.cantidadProducto);
-            setSelectedProductos(paquete.assignedPro.map(pro => ({
-                idProducto: pro.idProducto,
-                cantidad: pro.producto_paquete.cantidad
-            })));
+            const mappedProductos = paquete.assignedPro.map(prod => ({
+                idProducto: prod.idProducto,
+                cantidad: prod.producto_paquete.cantidad
+            }));
+            setProductos(mappedProductos);
         } catch (error) {
-            console.error('Error fetching paquete:', error);
+            console.error("Error al obtener el paquete:", error);
         }
     };
 
-    const getProductos = async () => {
+    const getProductosList = async () => {
         try {
-            const res = await axios.get(URI_PRODUCTOS);
-            setProductos(res.data);
+            const res = await axios.get(URI_PROD);
+            setProductosList(res.data);
         } catch (error) {
-            console.error('Error fetching productos:', error);
+            console.error("Error al obtener los productos:", error);
         }
-    };
-
-    const updatePaq = async (e) => {
-        e.preventDefault();
-        try {
-            const paqueteData = {
-                nombre,
-                precio,
-                descripcion,
-                cantidadProducto,
-                productos: selectedProductos,
-            };
-            await axios.put(`${URI}${idPaquete}`, paqueteData);
-            navigate('/paquete');
-        } catch (error) {
-            console.error('Error updating paquete:', error);
-        }
-    };
-
-    const handleProductoChange = (index, field, value) => {
-        const newSelectedProductos = [...selectedProductos];
-        newSelectedProductos[index] = {
-            ...newSelectedProductos[index],
-            [field]: value,
-        };
-        setSelectedProductos(newSelectedProductos);
     };
 
     const addProductoField = () => {
-        setSelectedProductos([...selectedProductos, { idProducto: '', cantidad: 1 }]);
+        setProductos([...productos, { idProducto: '', cantidad: 1 }]);
     };
 
     const removeProductoField = (index) => {
-        const newSelectedProductos = selectedProductos.filter((_, i) => i !== index);
-        setSelectedProductos(newSelectedProductos);
+        const newProductos = [...productos];
+        newProductos.splice(index, 1);
+        setProductos(newProductos);
+    };
+
+    const handleProductoChange = (index, key, value) => {
+        const newProductos = [...productos];
+        if (key === 'cantidad') {
+            const cantidad = parseInt(value, 10);
+            newProductos[index] = { ...newProductos[index], [key]: isNaN(cantidad) ? 0 : cantidad };
+        } else {
+            newProductos[index] = { ...newProductos[index], [key]: value };
+        }
+        setProductos(newProductos);
+    };
+
+    const update = async (e) => {
+        e.preventDefault();
+        try {
+            console.log(`Updating paquete with id: ${idPaquete}`);
+            console.log({
+                nombre,
+                precio,
+                descripcion,
+                productos,
+            });
+            const response = await axios.put(`${URI_PAQ}${idPaquete}`, {
+                nombre,
+                precio: parseFloat(precio),
+                descripcion,
+                productos,
+            });
+            console.log('Response from server:', response);
+            navigate('/admin/paquete');
+        } catch (error) {
+            console.error("Error al actualizar el paquete:", error);
+        }
     };
 
     return (
-        <div className="container">
-            <h3>Editar Paquete</h3>
-            <form onSubmit={updatePaq}>
-                <div className="mb-3">
-                    <label className="form-label">Nombre</label>
+        <div align='center'>
+            <h1>Editar Paquete</h1>
+            <form onSubmit={update}>
+                <div className='mb-3'>
+                    <label className='form-label'>Nombre</label>
                     <input
-                        type="text"
-                        className="form-control"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
+                        type='text'
+                        className='form-control'
                     />
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Precio</label>
+                <div className='mb-3'>
+                    <label className='form-label'>Precio</label>
                     <input
-                        type="number"
-                        className="form-control"
                         value={precio}
                         onChange={(e) => setPrecio(e.target.value)}
+                        type='number'
+                        className='form-control'
                     />
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Descripción</label>
+                <div className='mb-3'>
+                    <label className='form-label'>Descripción</label>
                     <textarea
-                        className="form-control"
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
+                        className='form-control'
                     ></textarea>
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Cantidad de Productos</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={cantidadProducto}
-                        onChange={(e) => setCantidadProducto(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Productos</label>
-                    {selectedProductos.map((producto, index) => (
-                        <div key={index} className="d-flex mb-2">
+                <div className='mb-3'>
+                    <label className='form-label'>Cantidad de Productos</label>
+                    <button type='button' onClick={addProductoField} className='btn btn-success ml-2'>+</button>
+                    {productos.map((producto, index) => (
+                        <div key={index} className='input-group mb-3'>
                             <select
-                                className="form-select"
                                 value={producto.idProducto}
-                                onChange={(e) =>
-                                    handleProductoChange(index, 'idProducto', e.target.value)
-                                }
+                                onChange={(e) => handleProductoChange(index, 'idProducto', e.target.value)}
+                                className='form-control'
                             >
-                                <option value="">Seleccione un producto</option>
-                                {productos.map((prod) => (
-                                    <option key={prod.idProducto} value={prod.idProducto}>
-                                        {prod.nombre}
-                                    </option>
+                                <option value='' disabled>Selecciona un producto</option>
+                                {productosList.map(prod => (
+                                    <option key={prod.idProducto} value={prod.idProducto}>{prod.nombre}</option>
                                 ))}
                             </select>
                             <input
-                                type="number"
-                                className="form-control mx-2"
+                                type='number'
                                 value={producto.cantidad}
-                                onChange={(e) =>
-                                    handleProductoChange(index, 'cantidad', e.target.value)
-                                }
-                                min="1"
+                                onChange={(e) => handleProductoChange(index, 'cantidad', e.target.value)}
+                                className='form-control'
                             />
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                onClick={() => removeProductoField(index)}
-                            >
-                                Eliminar
-                            </button>
+                            <button type='button' onClick={() => removeProductoField(index)} className='btn btn-danger'>-</button>
                         </div>
                     ))}
-                    <button type="button" className="btn btn-secondary" onClick={addProductoField}>
-                        Añadir Producto
-                    </button>
                 </div>
-                <button type="submit" className="btn btn-primary">
-                    Actualizar Paquete
-                </button>
+                <button type='submit' className='btn btn-primary'>Actualizar</button>
             </form>
         </div>
     );

@@ -10,7 +10,7 @@ const CreatePaq = () => {
     const [precio, setPrecio] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [cantidadProducto, setCantidadProducto] = useState(1);
-    const [productos, setProductos] = useState([]);
+    const [productos, setProductos] = useState([{ idProducto: '', cantidad: 1 }]);
     const [productosList, setProductosList] = useState([]);
     const navigate = useNavigate();
 
@@ -29,8 +29,8 @@ const CreatePaq = () => {
     };
 
     const addProductoField = () => {
-        setCantidadProducto(cantidadProducto + 1);
         setProductos([...productos, { idProducto: '', cantidad: 1 }]);
+        setCantidadProducto(cantidadProducto + 1);
     };
 
     const removeProductoField = (index) => {
@@ -38,6 +38,12 @@ const CreatePaq = () => {
         newProductos.splice(index, 1);
         setProductos(newProductos);
         setCantidadProducto(cantidadProducto - 1);
+    };
+
+    const handleProductoChange = (index, key, value) => {
+        const newProductos = [...productos];
+        newProductos[index] = { ...newProductos[index], [key]: value };
+        setProductos(newProductos);
     };
 
     const store = async (e) => {
@@ -50,7 +56,7 @@ const CreatePaq = () => {
                 cantidadProducto,
                 productos,
             });
-            navigate('admin/paquete');
+            navigate('/admin/paquete');
         } catch (error) {
             console.error("Error al crear el paquete:", error);
         }
@@ -89,15 +95,11 @@ const CreatePaq = () => {
                 <div className='mb-3'>
                     <label className='form-label'>Cantidad de Productos</label>
                     <button type='button' onClick={addProductoField} className='btn btn-success ml-2'>+</button>
-                    {Array.from({ length: cantidadProducto }).map((_, index) => (
+                    {productos.map((producto, index) => (
                         <div key={index} className='input-group mb-3'>
                             <select
-                                value={productos[index]?.idProducto || ''}
-                                onChange={(e) => setProductos(prevState => {
-                                    const newState = [...prevState];
-                                    newState[index] = { ...newState[index], idProducto: e.target.value };
-                                    return newState;
-                                })}
+                                value={producto.idProducto}
+                                onChange={(e) => handleProductoChange(index, 'idProducto', e.target.value)}
                                 className='form-control'
                             >
                                 <option value='' disabled>Selecciona un producto</option>
@@ -107,12 +109,8 @@ const CreatePaq = () => {
                             </select>
                             <input
                                 type='number'
-                                value={productos[index]?.cantidad || 1}
-                                onChange={(e) => setProductos(prevState => {
-                                    const newState = [...prevState];
-                                    newState[index] = { ...newState[index], cantidad: parseInt(e.target.value) };
-                                    return newState;
-                                })}
+                                value={producto.cantidad}
+                                onChange={(e) => handleProductoChange(index, 'cantidad', parseInt(e.target.value))}
                                 className='form-control'
                             />
                             <button type='button' onClick={() => removeProductoField(index)} className='btn btn-danger'>-</button>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const URI = 'http://localhost:8000/producto/';
-
+//PROBLEMA CON MOSTRAR  LA RELACION CON LOS INGREDIENTES
 const ShowPro = () => {
     const [productos, setProductos] = useState([]);
 
@@ -35,7 +35,7 @@ const ShowPro = () => {
         <div className='container-fluid d-flex justify-content-center align-items-center' align='center' style={{ minHeight: '80vh' }}>
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-10'>
-                    <Link to="/pro/create" className='btn btn-primary mt-2 mb-2'>
+                    <Link to="/producto/create" className='btn btn-primary mt-2 mb-2'>
                         <i className="fas fa-plus"></i>
                     </Link>
                     <div className="table-responsive">

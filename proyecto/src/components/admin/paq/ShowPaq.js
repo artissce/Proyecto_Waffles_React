@@ -25,7 +25,8 @@ const ShowPaq = () => {
     const deletePaquete = async (idPaquete) => {
         try {
             await axios.delete(`${URI}${idPaquete}`);
-            getPaquetes(); // Actualiza la lista después de la eliminación
+            // Actualiza la lista de paquetes localmente
+            setPaquetes(paquetes.filter(paquete => paquete.idPaquete !== idPaquete));
         } catch (error) {
             console.error('Error deleting paquete:', error);
         }

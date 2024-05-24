@@ -1,5 +1,7 @@
 import PaqueteModel from "../models/PaqueteModel.js";
 import ProductoModel from "../models/ProductoModel.js";
+import Producto_PaqueteModel from "../models/Producto_PaqueteModel.js"
+import db from '../database/db.js';
 /*METODOS PARA EL CRUD */
 
 // Obtener todos los paquetes con productos asociados
@@ -65,21 +67,40 @@ export const createPaquete = async (req, res) => {
             // Asocia cada producto al paquete con su cantidad respectiva
             for (const producto of productos) {
                 const { idProducto, cantidad } = producto;
-                await paquete.addAssignedPro(idProducto, { through: { cantidad } });
+                //await paquete.addAssignedPro(idProducto, { through: { cantidad } });
+                await Producto_PaqueteModel.create({
+                    idProducto,
+                    idPaquete: paquete.idPaquete, // Utiliza el id del paquete recién creado
+                    cantidad,
+                });
             }
         }
 
         res.json({ message: 'Registro de paquete correctamente', newPaquete: paquete.toJSON() });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === 'SequelizeValidationError') {
+            // Captura errores de validación específicos de Sequelize
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({ message: 'Errores de validación:', errors });
+        } else {
+            res.status(500).json({ message: error.message });
+        }
     }
+    
 };
 //actualizar un registro
 export const updatePaquete = async (req, res) => {
     try {
-
-        
+        const idPaquete = req.params.idPaquete; // Nota: Cambiado para asegurar que el idPaquete se obtenga correctamente
         const { nombre, precio, descripcion, cantidadProducto, productos } = req.body;
+
+        // Verifica si idPaquete se recupera correctamente
+        if (!idPaquete) {
+            return res.status(400).json({ message: 'Falta idPaquete en los parámetros de la solicitud' });
+        }
+
+        // Mostrar el idPaquete en la consola para depuración
+        console.log(`idPaquete recibido: ${idPaquete}`);
 
         // Construir el objeto de datos a actualizar para el paquete
         const updatedData = {};
@@ -89,33 +110,41 @@ export const updatePaquete = async (req, res) => {
         if (cantidadProducto) updatedData.cantidadProducto = cantidadProducto;
 
         // Realizar la actualización en la base de datos para el paquete
-        const [updatedCount] = await PaqueteModel.update(req.body, {
-            where: { idPaquete: req.params.idPaquete }
+        const [updatedCount] = await PaqueteModel.update(updatedData, {
+            where: { idPaquete: idPaquete }
         });
 
         if (updatedCount === 0) {
-            return res.status(404).json({ message: 'Paquete not found' }); // Handle no record found
+            return res.status(404).json({ message: 'Paquete no encontrado' }); // Manejar cuando no se encuentra el registro
         }
 
         // Obtener el paquete actualizado
-        const updatedPaquete = await PaqueteModel.findByPk(req.params.idPaquete);
+        const updatedPaquete = await PaqueteModel.findByPk(idPaquete);
 
         // Actualizar las relaciones con productos si se proporcionan en la solicitud
         if (productos && Array.isArray(productos) && productos.length > 0) {
             // Limpiar las relaciones existentes
-            await updatedPaquete.setAssignedPro([]);
+            await Producto_PaqueteModel.destroy({ where: { idPaquete: idPaquete } });
 
             // Establecer las nuevas relaciones con productos
             for (const producto of productos) {
-                await updatedPaquete.addAssignedPro(producto.idProducto, { through: { cantidad: producto.cantidad } });
+                await Producto_PaqueteModel.create({
+                    idProducto: producto.idProducto,
+                    idPaquete: idPaquete,
+                    cantidad: producto.cantidad,
+                });
             }
         }
 
-        res.json({ message: 'Actualizacion de paquete correcta' });
+        res.json({ message: 'Actualización de paquete correcta' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+
+
 
 //elminar un registro
 export const deletePaquete = async (req, res) => {
@@ -137,16 +166,13 @@ export const deletePaquete = async (req, res) => {
         }
 
         // Eliminar la asociación con productos antes de eliminar el paquete
-        await paquete.removeAssignedPro(paquete.assignedPro.map(p => p.idProducto));
+        await Producto_PaqueteModel.destroy({ where: { idPaquete: idPaquete } });
 
         // Eliminar el paquete
-        const resultado = await paquete.destroy();
+        await PaqueteModel.destroy({ where: { idPaquete: idPaquete } });
 
-        if (resultado === 1) {
-            res.json({ "message": "Borrado de paquete correcto" });
-        } else {
-            res.status(404).json({ "message": "Paquete no eliminado" });
-        }
+
+        res.json({ "message": "Borrado de paquete correcto" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
