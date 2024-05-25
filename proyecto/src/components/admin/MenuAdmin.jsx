@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './css/MenuAdmin.css'; // Archivo CSS para estilos personalizados
+import Container from '../Container';
 
 const MenuAdmin = () => {
     return (
-        <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#f0f0f0' }}>
-            <div className="row justify-content-center">
+       
+        <div className="row justify-content-center">
                 <div className="col-12 col-md-10 col-lg-8">
                     <div className="menu-admin-container">
                         <h2 className="text-center mb-4">Admin Menu</h2>
@@ -28,7 +29,6 @@ const MenuAdmin = () => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 

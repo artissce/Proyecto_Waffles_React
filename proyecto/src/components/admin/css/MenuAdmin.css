@@ -14,4 +14,18 @@
     width: 100%;
     padding: 15px;
     font-size: 1.1rem;
+    background: white; /* Fondo blanco inicialmente */
+    color: black; /* Color del texto */
+    border: none;
+    transition: background 0.5s, color 0.5s, transform 0.5s;
+}
+
+.menu-table .btn:hover,
+.menu-table .btn:focus {
+    background: linear-gradient(45deg, #ffa726, #ff438b); /* Gradiente animado */
+    background-size: 200% 200%;
+    color: white; /* Color del texto cuando se pasa el cursor */
+    background-position: right center; /* Cambia la posición del gradiente */
+    transform: scale(1.05);
+    outline: none;
 }
