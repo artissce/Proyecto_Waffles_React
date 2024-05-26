@@ -18,7 +18,7 @@ const EditRol = ()=>{
         console.log("URL de la solicitud PUT:", url);
         try {
             await axios.put(URI+ idRol, { nombreRol:nombreRol });
-            navigate('/roles'); // Navegar de regreso al listado después de la actualización
+            navigate('/admin/roles'); // Navegar de regreso al listado después de la actualización
         } catch (error) {
             console.error("Error al actualizar el rol:", error);
         }

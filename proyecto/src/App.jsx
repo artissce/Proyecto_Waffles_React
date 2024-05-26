@@ -7,6 +7,8 @@ import { Home } from './components/home/Home';
 import { useState } from 'react';
 import { HomeAdmin } from './components/admin/HomeAdmin';
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 //import { Switch, BrowserRouter, Route,Router } from 'react-router-dom';
 
 function App() {

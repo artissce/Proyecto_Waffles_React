@@ -3,35 +3,47 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Container from '../../Container';
 import { Link } from 'react-router-dom';
-const URI = 'http://localhost:8000/usuarios/'
+import { validarNombre } from '../../Validaciones.jsx';
+import Alert from '../../Alert.jsx'; // Importa el componente Alert
+const URI = 'http://localhost:8000/roles/'
 
 
 
 const CreateUser = ()=>{
-    const [nombreUser,setNombreUser]=useState('')
-
+    const [nombreRol,setNombreRol]=useState('')
+    const [error, setError] = useState('');
     const navigate = useNavigate()
 
     //guardar
-    const store = async(e)=>{
-        e.preventDefault()
-        await axios.post(URI,{nombreUser:nombreUser})
-        navigate('/usuarios')
-    }
+    const store = async (e) => {
+        e.preventDefault();
+        const error = validarNombre(nombreRol);
+        if (error) {
+            setError(error);
+            return;
+        }
+
+        try {
+            await axios.post(URI, { nombreRol });
+            navigate('/admin/roles');
+        } catch (err) {
+            console.error(err.response?.data || err.message);
+        }
+    };
 
     return(
         <Container>
         <div>
-            <h1>Create User</h1>
+            <h1>Crear rol</h1>
             <form onSubmit={store}>
                 <div className='mb-3'>
-                    <label className='form=label'>User</label>
+                    <label className='form=label'>Nombre del rol:</label>
                     <br></br>
                     <input 
-                        value={nombreUser} onChange={(e)=>setNombreUser(e.target.value)} 
+                        value={nombreRol} onChange={(e)=>setNombreRol(e.target.value)} 
                         type="text" className='form-contUser form-control'/>
                 </div>
-                    
+                {error && <Alert message={error} type="danger" />}   
                 <button type="submit" >Enviar</button>
                 
             </form>
