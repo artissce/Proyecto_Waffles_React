@@ -78,7 +78,7 @@ button:hover,
 button:focus {
   background: linear-gradient(45deg, #ff438b, #ffa726); /* Gradiente animado */
   background-size: 200% 200%;
-  color: white; /* Color del texto cuando se pasa el cursor */
+  color: #ffffffa7; /* Color del texto cuando se pasa el cursor */
   background-position: right center; /* Cambia la posición del gradiente */
   transform: scale(1.05);
   border: none;
