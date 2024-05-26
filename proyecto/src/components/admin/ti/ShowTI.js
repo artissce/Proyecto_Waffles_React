@@ -31,6 +31,7 @@ const ShowTI = () => {
                                 <tr>
                                     <th scope="col" style={{ width: '20%' }}>idTipo</th>
                                     <th scope="col" style={{ width: '15%' }}>Nombre</th>
+                                    <th scope="col" style={{ width: '15%' }}>Acc.</th>
                                 </tr>
                             </thead>
                             <tbody>

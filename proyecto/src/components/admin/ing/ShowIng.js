@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom';
 import Container from '../../Container';
 
 const ING_URI = 'http://localhost:8000/ing/';
+const TIPOS_URI = 'http://localhost:8000/tipo/';
 
 const ShowIng = () => {
-    const [Ingredientes, setIngredientes] = useState([]);
+    const [ingredientes, setIngredientes] = useState([]);
+    const [tipos, setTipos] = useState({});
 
-    // Fetch ingredientes on mount
+    // Fetch ingredientes and tipos on mount
     useEffect(() => {
         getIngredientes();
+        getTipos();
     }, []);
 
     const getIngredientes = async () => {
@@ -19,6 +22,19 @@ const ShowIng = () => {
             setIngredientes(res.data);
         } catch (error) {
             console.error('Error fetching ingredientes:', error);
+        }
+    };
+
+    const getTipos = async () => {
+        try {
+            const res = await axios.get(TIPOS_URI);
+            const tiposMap = res.data.reduce((acc, tipo) => {
+                acc[tipo.idTipo] = tipo.nombreTipo;
+                return acc;
+            }, {});
+            setTipos(tiposMap);
+        } catch (error) {
+            console.error('Error fetching tipos:', error);
         }
     };
 
@@ -50,11 +66,11 @@ const ShowIng = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Ingredientes.map(ingrediente => (
+                                    {ingredientes.map(ingrediente => (
                                         <tr key={ingrediente.idIng}>
                                             <td>{ingrediente.idIng}</td>
                                             <td>{ingrediente.nombre}</td>
-                                            <td>{ingrediente.idTipo}</td>
+                                            <td>{tipos[ingrediente.idTipo] || 'Desconocido'}</td>
                                             <td>
                                                 <Link to={`/admin/ing/edit/${ingrediente.idIng}`} className='btn btn-info'>
                                                     <i className="fas fa-edit"></i>

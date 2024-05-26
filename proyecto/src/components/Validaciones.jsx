@@ -33,3 +33,10 @@ export const validarContrasena = (contrasena) => {
     }
     return null;
 };
+
+export const validarSeleccion = (id) => {
+    if (!id) {
+        return 'Debe seleccionar un tipo';
+    }
+    return null;
+};
