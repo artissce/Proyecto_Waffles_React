@@ -2,8 +2,9 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Container from '../../Container';
+
 const URI = 'http://localhost:8000/producto/';
-//PROBLEMA CON MOSTRAR  LA RELACION CON LOS INGREDIENTES
+
 const ShowPro = () => {
     const [productos, setProductos] = useState([]);
 
@@ -11,7 +12,6 @@ const ShowPro = () => {
         getPro();
     }, []);
 
-    // Procedure to fetch all products
     const getPro = async () => {
         try {
             const res = await axios.get(URI);
@@ -21,11 +21,10 @@ const ShowPro = () => {
         }
     };
 
-    // Procedure to delete a product
     const deletePro = async (idProducto) => {
         try {
             await axios.delete(`${URI}${idProducto}`);
-            getPro(); // Refresh the list after deletion
+            getPro();
         } catch (error) {
             console.error('Error deleting product:', error);
         }
@@ -33,62 +32,61 @@ const ShowPro = () => {
 
     return (
         <Container>
-        <div className='container-fluid d-flex justify-content-center align-items-center' align='center' style={{ minHeight: '80vh' }}>
-            <div className='row justify-content-center'>
-                <div className='col-12 col-lg-10'>
-                    <Link to="/admin/producto/create" className='btn btn-primary mt-2 mb-2'>
-                        <i className="fas fa-plus"></i>
-                    </Link>
-                    <div className="table-responsive">
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th scope="col" style={{ width: '10%' }}>ID</th>
-                                    <th scope="col" style={{ width: '20%' }}>Nombre</th>
-                                    <th scope="col" style={{ width: '10%' }}>Precio</th>
-                                    <th scope="col" style={{ width: '15%' }}>Categoría</th>
-                                    <th scope="col" style={{ width: '25%' }}>Descripción</th>
-                                    <th scope="col" style={{ width: '10%' }}>Ingredientes</th> {/* Nueva columna para mostrar ingredientes */}
-                                    <th scope="col" style={{ width: '10%' }}>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {productos.map((producto) => (
-                                    <tr key={producto.idProducto}>
-                                        <td>{producto.idProducto}</td>
-                                        <td>{producto.nombre}</td>
-                                        <td>{producto.precio}</td>
-                                        <td>{producto.categoria}</td>
-                                        <td>{producto.descripcion}</td>
-                                        <td>
-                                            {producto.ingredientes && Array.isArray(producto.ingredientes) ? (
-                                                <ul>
-                                                    {producto.ingredientes.map((ingrediente) => (
-                                                        <li key={ingrediente.idIng}>{ingrediente.nombreIng}</li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <span>No hay ingredientes</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <Link to={`/admin/producto/edit/${producto.idProducto}`} className='btn btn-info'>
-                                                <i className="fas fa-edit"></i>
-                                            </Link>
-                                            <button onClick={() => deletePro(producto.idProducto)} className='btn btn-danger'>
-                                                <i className="fas fa-trash-alt"></i>
-                                            </button>
-                                        </td>
+            <div className='container-fluid'>
+                <div className='row justify-content-center'>
+                    <div className='col-12'>
+                        <Link to="/admin/producto/create" className='btn btn-primary mt-2 mb-2'>
+                            <i className="fas fa-plus"></i> 
+                        </Link>
+                        <div className="table-responsive">
+                            <table className='table table-striped table-hover'>
+                                <thead className="thead-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Categoría</th>
+                                        <th>Descripción</th>
+                                        <th>Ingredientes</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {productos.map((producto) => (
+                                        <tr key={producto.idProducto}>
+                                            <td>{producto.idProducto}</td>
+                                            <td>{producto.nombre}</td>
+                                            <td>{producto.precio}</td>
+                                            <td>{producto.categoria}</td>
+                                            <td>{producto.descripcion}</td>
+                                            <td>
+                                                {producto.assignedIng && Array.isArray(producto.assignedIng) ? (
+                                                    <ul className="list-unstyled">
+                                                        {producto.assignedIng.map((ingrediente) => (
+                                                            <li key={ingrediente.idIng}>{ingrediente.nombre}</li>
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <span>No hay ingredientes</span>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <Link to={`/admin/producto/edit/${producto.idProducto}`} className='btn btn-info btn-sm mr-1'>
+                                                    <i className="fas fa-edit"></i>
+                                                </Link>
+                                                <button onClick={() => deletePro(producto.idProducto)} className='btn btn-danger btn-sm'>
+                                                    <i className="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                     </div>
-                    <br></br>
-                    <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                 </div>
             </div>
-        </div>
         </Container>
     );
 };

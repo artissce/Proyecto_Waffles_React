@@ -40,3 +40,39 @@ export const validarSeleccion = (id) => {
     }
     return null;
 };
+
+export const validarPrecio = (precio) => {
+    if (!precio) {
+        return 'El precio no puede estar vacío';
+    }
+    if (isNaN(precio) || precio <= 0) {
+        return 'El precio debe ser un número positivo';
+    }
+    return null;
+};
+
+export const validarCategoria = (categoria) => {
+    if (!categoria) {
+        return 'Debe seleccionar una categoría';
+    }
+    return null;
+};
+
+export const validarDescripcion = (descripcion) => {
+    if (!descripcion) {
+        return 'La descripción no puede estar vacía';
+    }
+    return null;
+};
+
+export const validarIngredientes = (ingredientes) => {
+    if (!ingredientes || !Array.isArray(ingredientes) || ingredientes.length === 0) {
+        return 'Debe agregar al menos un ingrediente';
+    }
+    for (let ingrediente of ingredientes) {
+        if (!ingrediente) {
+            return 'Debe seleccionar un ingrediente para cada campo';
+        }
+    }
+    return null;
+};

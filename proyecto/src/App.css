@@ -84,3 +84,7 @@ button:focus {
   border: none;
   outline: none;
 }
+.table-responsive {
+  max-height: 60vh;
+  overflow-y: auto;
+}

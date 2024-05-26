@@ -20,18 +20,20 @@ const EditPro = () => {
 
     useEffect(() => {
         getProById();
+        getIngredientesList();
     }, []);
 
     const getProById = async () => {
         try {
             const res = await axios.get(URI + idProducto);
             const pro = res.data;
+            console.log("Producto obtenido:", pro); // Verifica los datos del producto
             setNombre(pro.nombre);
             setPrecio(pro.precio);
             setCategoria(pro.categoria);
             setDescripcion(pro.descripcion);
-            setCantIng(pro.cantIng);
-            setIngredientes(pro.ingredientes.map(ing => ing.idIng)); // Get only ingredient IDs
+            setCantIng(pro.assignedIng.length);
+            setIngredientes(pro.assignedIng.map(ing => ing.idIng));
         } catch (error) {
             console.error('Error fetching product:', error);
         }
@@ -40,16 +42,11 @@ const EditPro = () => {
     const getIngredientesList = async () => {
         try {
             const res = await axios.get(URI_ING);
-            console.log("Lista de ingredientes:", res.data); // Verify ingredient data
             setIngredientesList(res.data);
         } catch (error) {
             console.error("Error fetching ingredientes:", error);
         }
     };
-
-    useEffect(() => {
-        getIngredientesList();
-    }, []);
 
     const handleIngredientChange = (index, value) => {
         const newIngredientes = [...ingredientes];
@@ -88,74 +85,80 @@ const EditPro = () => {
 
     return (
         <Container>
-        <div align='center'>
-            <h1>Editar Producto</h1>
-            <form onSubmit={updatePro}>
-                <div className='mb-3'>
-                    <label className='form-label'>Nombre del Producto</label>
-                    <br/>
-                    <input 
-                        value={nombre} onChange={(e) => setNombre(e.target.value)} 
-                        type="text" className='form-control' />
-                    <br/>
-                </div>
-                <div className='mb-3'>
-                    <label className='form-label'>Precio</label>
-                    <br/>
-                    <input 
-                        value={precio} onChange={(e) => setPrecio(e.target.value)} 
-                        type="text" className='form-control' />
-                    <br/>
-                </div>
-                <div className='mb-3'>
-                    <label className='form-label'>Categoría</label>
-                    <br/>
-                    <select 
-                        value={categoria} onChange={(e) => setCategoria(e.target.value)} 
-                        className='form-select'>
-                        <option value="Postre">Postre</option>
-                        <option value="Bebida Fría">Bebida Fría</option>
-                        <option value="Bebida Caliente">Bebida Caliente</option>
-                        <option value="Platillo">Platillo</option>
-                        <option value="Desayuno">Desayuno</option>
-                    </select>
-                    <br/>
-                </div>
-                <div className='mb-3'>
-                    <label className='form-label'>Descripción</label>
-                    <br/>
-                    <input 
-                        value={descripcion} onChange={(e) => setDescripcion(e.target.value)} 
-                        type="text" className='form-control' />
-                    <br/>
-                </div>
-                <div className='mb-3'>
-                    <label className='form-label'>Cantidad de Ingredientes</label>
-                    <br/>
-                    <button type='button' onClick={addIngredientField} className='btn btn-success ml-2'>+</button>
-                    <br/>
-                    <br/>
-                    {Array.from({ length: cantIng }).map((_, index) => (
-                        <div key={index} className='input-group mb-3'>
-                            <select
-                                value={ingredientes[index] || ''}
-                                onChange={(e) => handleIngredientChange(index, e.target.value)}
-                                className='form-control'
-                            >
-                                <option value='' disabled>Selecciona un ingrediente</option>
-                                {ingredientesList.map(ing => (
-                                    <option key={ing.idIng} value={ing.idIng}>{ing.nombre}</option>
+            <div className='container'>
+                <div className='row justify-content-center'>
+                    <div className='col-12 col-lg-8'>
+                        <h1 className='text-center'>Editar Producto</h1>
+                        <form onSubmit={updatePro}>
+                            <div className='form-group'>
+                                <label className='form-label'>Nombre del Producto</label>
+                                <input
+                                    value={nombre}
+                                    onChange={(e) => setNombre(e.target.value)}
+                                    type="text"
+                                    className='form-control'
+                                />
+                            </div>
+                            <div className='form-group'>
+                                <label className='form-label'>Precio</label>
+                                <input
+                                    value={precio}
+                                    onChange={(e) => setPrecio(e.target.value)}
+                                    type="number"
+                                    className='form-control'
+                                />
+                            </div>
+                            <div className='form-group'>
+                                <label className='form-label'>Categoría</label>
+                                <select
+                                    value={categoria}
+                                    onChange={(e) => setCategoria(e.target.value)}
+                                    className='form-control'
+                                >
+                                    <option value='' disabled>Selecciona una categoría</option>
+                                    <option value="Postre">Postre</option>
+                                    <option value="Bebida Fría">Bebida Fría</option>
+                                    <option value="Bebida Caliente">Bebida Caliente</option>
+                                    <option value="Platillo">Platillo</option>
+                                    <option value="Desayuno">Desayuno</option>
+                                </select>
+                            </div>
+                            <div className='form-group'>
+                                <label className='form-label'>Descripción</label>
+                                <textarea
+                                    value={descripcion}
+                                    onChange={(e) => setDescripcion(e.target.value)}
+                                    className='form-control'
+                                ></textarea>
+                            </div>
+                            <div className='form-group'>
+                                <label className='form-label'>Ingredientes</label>
+                                <button type='button' onClick={addIngredientField} className='btn btn-success btn-sm ml-2 mb-2'>+</button>
+                                {Array.from({ length: cantIng }).map((_, index) => (
+                                    <div key={index} className='input-group mb-3'>
+                                        <select
+                                            value={ingredientes[index] || ''}
+                                            onChange={(e) => handleIngredientChange(index, e.target.value)}
+                                            className='form-control'
+                                        >
+                                            <option value='' disabled>Selecciona un ingrediente</option>
+                                            {ingredientesList.map(ing => (
+                                                <option key={ing.idIng} value={ing.idIng}>{ing.nombre}</option>
+                                            ))}
+                                        </select>
+                                        <div className="input-group-append">
+                                            <button type='button' onClick={() => removeIngredientField(index)} className='btn btn-danger'>-</button>
+                                        </div>
+                                    </div>
                                 ))}
-                            </select>
-                            <button type='button' onClick={() => removeIngredientField(index)} className='btn btn-danger'>-</button>
-                        </div>
-                    ))}
+                            </div>
+                            <button type="submit" >Actualizar</button>
+                        </form>
+                        <Link to="/admin/producto" className='btn btn-secondary btn-block mt-3'>Regresar</Link>
+                    </div>
                 </div>
-                <button type="submit" >Actualizar</button>
-            </form>
-            <br></br>
-            <Link to="/admin/producto" className='btn btn-secondary mt-2'>Regresar</Link>
-        </div></Container>
+            </div>
+        </Container>
     );
 };
 

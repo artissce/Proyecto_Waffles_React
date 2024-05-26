@@ -11,12 +11,18 @@ await TiposIngredientesModel.sync();
 
 export const getAllPro = async(req,res) => {
     try {
-        const pro= await ProductoModel.findAll({
-            attributes: ['idProducto', 'nombre', 'precio','categoria','descripcion'],
-          });
-        res.json(pro)
+        const productos = await ProductoModel.findAll({
+            include: {
+                model: IngredientesModel,
+                as: 'assignedIng',
+                through: {
+                    attributes: []
+                }
+            }
+        });
+        res.json(productos);
     } catch (error) {
-        res.json({message:error.message})
+        res.status(500).json({ message: 'Error al obtener los productos' });
     }
 }
 // Método para obtener todos los productos con sus ingredientes
@@ -38,18 +44,25 @@ export const getProWithIngredients = async (req, res) => {
   };
   
 //mostrar un registro
-export const getPro = async(req,res) => {
+export const getPro = async(req, res) => {
     try {
-        console.log("ID del producto:", req.params.idProducto); // Agregar este log para depurar
-        const pro = await ProductoModel.findAll({
-            where:{
-                idProducto:req.params.idProducto
-            },
-            attributes: ['idProducto', 'nombre', 'precio','categoria','descripcion','cantIng'],
-        })
-        res.json(pro[0])
+        const { idProducto } = req.params;
+        const producto = await ProductoModel.findByPk(idProducto, {
+            include: {
+                model: IngredientesModel,
+                as: 'assignedIng',
+                through: {
+                    attributes: []
+                }
+            }
+        });
+        if (producto) {
+            res.json(producto);
+        } else {
+            res.status(404).json({ message: 'Producto no encontrado' });
+        }
     } catch (error) {
-        res.json({message:error.message})
+        res.status(500).json({ message: 'Error al obtener el producto' });
     }
 }
 //crear un registro
