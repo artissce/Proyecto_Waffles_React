@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {useState, useEffect} from 'react'
-import { BrowserRouter, Route, Link } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import Container from '../Container';
 const URI = 'http://localhost:8000/pedidos/'
 
 const ShowPedidos = () => {
@@ -22,12 +22,16 @@ const ShowPedidos = () => {
     }
     //proc crear
     return(
+        <Container>
     <div className='container-fluid d-flex justify-content-center align-items-center' style={{ minHeight: '80vh' }}>
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-10'>
-                    <Link to="/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
+                    <h1>Pedidos</h1> 
+                    <Link to="/home/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
+                    <br></br><br></br>
                     <div className="table-responsive">
                         <table className='table'>
+                            
                             <thead>
                                 <tr>
                                     <th scope="col" style={{ width: '20%' }}>Cliente</th>
@@ -47,7 +51,7 @@ const ShowPedidos = () => {
                                         <td>{pedido.paquete} </td>
                                         <td>{pedido.estado} </td>
                                         <td>
-                                            <Link to={`/edit/${pedido.idPedido}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
+                                            <Link to={`/home/edit/${pedido.idPedido}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
                                             <button onClick={()=>deletePedidos(pedido.idPedido)} className='btn btn-danger'><i className="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
@@ -55,9 +59,14 @@ const ShowPedidos = () => {
                             </tbody>
                         </table>
                     </div>
+                    <br></br>
+                    <Link to="/home" className='btn btn-secondary mt-2'>Regresar</Link>
                 </div>
+                
             </div>
+            
         </div>
+        </Container>
     )
 }
 export default ShowPedidos

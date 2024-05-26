@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Container from '../../Container';
-import '../css//ShowPaq.css'; // Asegúrate de tener un archivo CSS para los estilos específicos
+import Container from '../Container';
 
 const URI = 'http://localhost:8000/paquete/'; // Asegúrate de que esta URI coincida con tu endpoint del backend
 
-const ShowPaq = () => {
+const ShowMenu = () => {
     const [paquetes, setPaquetes] = useState([]);
 
     useEffect(() => {
@@ -37,11 +36,6 @@ const ShowPaq = () => {
     return (
         <Container>
             <div className='show-paq-container'>
-                <div className='header'>
-                    <Link to="/admin/paquete/create" className='btn btn-primary'>
-                        <i className="fas fa-plus"></i>
-                    </Link>
-                </div>
                 <div className="table-responsive">
                     <table className='table'>
                         <thead>
@@ -52,7 +46,6 @@ const ShowPaq = () => {
                                 <th scope="col">Descripción</th>
                                 <th scope="col">Cantidad</th>
                                 <th scope="col">Productos</th>
-                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,23 +63,16 @@ const ShowPaq = () => {
                                             </div>
                                         ))}
                                     </td>
-                                    <td>
-                                        <Link to={`/admin/paquete/edit/${paquete.idPaquete}`} className='btn btn-info'>
-                                            <i className="fas fa-edit"></i>
-                                        </Link>
-                                        <button onClick={() => deletePaquete(paquete.idPaquete)} className='btn btn-danger'>
-                                            <i className="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
+                                    
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-                <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
+                <Link to="/home" className='btn btn-secondary mt-2'>Regresar </Link>
             </div>
         </Container>
     );
 };
 
-export default ShowPaq;
+export default ShowMenu;

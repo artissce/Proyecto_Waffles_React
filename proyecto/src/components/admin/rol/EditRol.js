@@ -2,6 +2,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { Link } from 'react-router-dom';
+import Container from '../../Container';
 const URI = 'http://localhost:8000/roles/'
 
 
@@ -32,6 +34,7 @@ const EditRol = ()=>{
     }
 
     return(
+        <Container>
         <div>
             <h1>Edit Rol</h1>
             <form onSubmit={update}>
@@ -43,10 +46,12 @@ const EditRol = ()=>{
                     
                 </div>
                     
-                <button type="submit" className='btn btn-primary'>Update</button>
-                
+                <button type="submit" >Update</button>
+                <br></br>
+            <Link to="/admin/roles" className='btn btn-secondary mt-2'>Regresar</Link>
             </form>
         </div>
+        </Container>
     )
 }
 

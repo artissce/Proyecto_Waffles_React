@@ -2,7 +2,6 @@
   text-align: center;
 }
 
-
 .App-header {
   background-color: #282c34;
   min-height: 15vh;
@@ -50,9 +49,41 @@ body {
 /* Animación del fondo */
 @keyframes movimiento {
   from {
-      background-position: 0 0;
+    background-position: 0 0;
   }
   to {
-      background-position: 100% 100%;
+    background-position: 100% 100%;
   }
+}
+
+/* Estilo global para los labels */
+label {
+  font-size: 16px;
+  font-weight: bold;
+  background: linear-gradient(45deg, #ff438b, #ffa726); /* Gradiente animado #ff438b*/
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Botones personalizados */
+button {
+  background: white; /* Fondo blanco inicialmente */
+  color: black; /* Color del texto */
+  padding: 10px 20px;
+  border-radius: 30px !important; /* Esquinas redondeadas con un radio de 30px */
+  border: 2px solid rgb(0, 0, 0); /* Color del borde */
+  cursor: pointer;
+  transition: background 0.5s, color 0.5s, transform 0.5s;
+  margin-top: 10px;
+}
+
+button:hover,
+button:focus {
+  background: linear-gradient(45deg, #ff438b, #ffa726); /* Gradiente animado */
+  background-size: 200% 200%;
+  color: white; /* Color del texto cuando se pasa el cursor */
+  background-position: right center; /* Cambia la posición del gradiente */
+  transform: scale(1.05);
+  border: none;
+  outline: none;
 }

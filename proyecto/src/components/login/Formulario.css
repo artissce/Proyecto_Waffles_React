@@ -1,13 +1,12 @@
 .form-container {
     width: 80%; /* Ancho del contenedor del formulario */
-    max-width: 400px; /* Máximo ancho para tabletas */
+   
     margin-top: 3rem; /* Espacio entre el alert y el formulario */
   }
   
   .alert-container {
     position: fixed;
     top: 0;
-    width: 100%;
     display: flex;
     justify-content: center;
     z-index: 1000; /* Asegura que el alert esté por encima de otros elementos */
@@ -16,8 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Asegura que la sección ocupe al menos toda la altura de la pantalla */
-  }
+     }
   
   .formulario {
     margin-top: 3rem; /* Espacio entre el alert y el formulario */
@@ -29,19 +27,5 @@
   }
   
 
-label {
-    font-size: 16px;
-    color: blue;
-    font-weight: bold;
-  }
 
-button {
-    background-color: green;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-  }  
   

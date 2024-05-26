@@ -24,7 +24,7 @@ const ShowUser = () => {
 
     return (
         <Container>
-            <Link to="/usuarios/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
+            <Link to="/admin/usuarios/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
             <div className="table-responsive">
                 <table className='table table-striped'>
                     <thead>
@@ -40,15 +40,17 @@ const ShowUser = () => {
                                 <td>{user.idUsuario} </td>
                                 <td>{user.nombre} </td>
                                 <td>
-                                    <Link to={`/usuarios/edit/${user.idUsuario}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
+                                    <Link to={`/admin/usuarios/edit/${user.idUsuario}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
                                     <button onClick={() => deleteUser(user.idUsuario)} className='btn btn-danger'><i className="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                <br></br>
+                <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
             </div>
-            <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
+            
         </Container>
     )
 }

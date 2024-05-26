@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
-
+import Container from '../../Container';
 const URI = 'http://localhost:8000/tipo/'
 
 const ShowTI = () => {
@@ -22,10 +22,9 @@ const ShowTI = () => {
     }
     //proc crear
     return(
-    <div className='container-fluid d-flex justify-content-center align-items-center 'align='center' style={{ minHeight: '80vh' }}>
-            <div className='row justify-content-center'>
+        <Container>
                 <div className='col-12 col-lg-10'>
-                    <Link to="/tipo/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
+                    <Link to="/admin/tipo/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
                     <div className="table-responsive">
                         <table className='table'>
                             <thead>
@@ -40,7 +39,7 @@ const ShowTI = () => {
                                         <td>{Tipo.idTipo} </td>
                                         <td>{Tipo.nombreTipo} </td>
                                         <td>
-                                            <Link to={`/tipo/edit/${Tipo.idTipo}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
+                                            <Link to={`/admin/tipo/edit/${Tipo.idTipo}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
                                             <button onClick={()=>deleteTipo(Tipo.idTipo)} className='btn btn-danger'><i className="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
@@ -48,9 +47,10 @@ const ShowTI = () => {
                             </tbody>
                         </table>
                     </div>
+                    <br></br>
+                    <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                 </div>
-            </div>
-        </div>
+        </Container>
     )
 }
 export default ShowTI

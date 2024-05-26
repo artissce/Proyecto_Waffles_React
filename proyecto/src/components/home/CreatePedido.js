@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import Container from '../Container';
 const URI = 'http://localhost:8000/pedidos/'
-
 
 const CreatePedido = ()=>{
     const [cliente,setCliente]=useState('')
@@ -20,6 +20,7 @@ const CreatePedido = ()=>{
     }
 
     return(
+        <Container>
         <div>
             <h1>Create pedido</h1>
             <form onSubmit={store}>
@@ -43,10 +44,13 @@ const CreatePedido = ()=>{
                         type="text" className='form-control'/>
                 </div>
                     
-                <button type="submit" className='btn btn-primary'>Enviar</button>
+                <button type="submit">Enviar</button>
                 
             </form>
+            <br></br>
+            <Link to="/home/pedido" className='btn btn-secondary mt-2'>Regresar</Link>
         </div>
+        </Container>
     )
 }
 

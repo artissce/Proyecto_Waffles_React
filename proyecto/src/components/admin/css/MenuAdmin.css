@@ -16,7 +16,7 @@
     font-size: 1.1rem;
     background: white; /* Fondo blanco inicialmente */
     color: black; /* Color del texto */
-    border: none;
+    border: 2px solid rgb(47, 45, 41); /* Color del borde */
     transition: background 0.5s, color 0.5s, transform 0.5s;
 }
 
@@ -26,6 +26,22 @@
     background-size: 200% 200%;
     color: white; /* Color del texto cuando se pasa el cursor */
     background-position: right center; /* Cambia la posición del gradiente */
+    transform: scale(1.05);
+    border:none;
+    outline: none;
+}
+
+.menu-table .btn-secondary {
+    background: white; /* Fondo blanco inicialmente */
+    color: black; /* Color del texto */
+    border: 2px solid #6c757d; /* Color del borde */
+    transition: background 0.3s, color 0.3s;
+}
+
+.menu-table .btn-secondary:hover,
+.menu-table .btn-secondary:focus {
+    background: red; /* Color de fondo cuando se pasa el cursor */
+    color: white; /* Color del texto cuando se pasa el cursor */
     transform: scale(1.05);
     outline: none;
 }

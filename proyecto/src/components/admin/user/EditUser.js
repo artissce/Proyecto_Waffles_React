@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Container from '../../Container';
 
+import { Link } from 'react-router-dom';
+
 const URI = 'http://localhost:8000/usuarios/'
 
 const EditUser = () => {
@@ -56,8 +58,9 @@ const EditUser = () => {
                         value={contrasena} onChange={(e) => setContrasena(e.target.value)}
                         type="password" className='form-control' />
                 </div>
-                <button type="submit" className='btn btn-primary'>Update</button>
+                <button type="submit" >Update</button>
             </form>
+            <Link to="/admin/usuarios/" className='btn btn-secondary mt-2'>Regresar</Link>
         </Container>
     )
 }

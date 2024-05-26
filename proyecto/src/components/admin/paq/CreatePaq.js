@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import Container from '../../Container';
 const URI_PAQ = 'http://localhost:8000/paquete/';
 const URI_PROD = 'http://localhost:8000/producto/';
 
@@ -63,6 +64,7 @@ const CreatePaq = () => {
     };
 
     return (
+        <Container>
         <div align='center'>
             <h1>Crear Paquete</h1>
             <form onSubmit={store}>
@@ -94,7 +96,10 @@ const CreatePaq = () => {
                 </div>
                 <div className='mb-3'>
                     <label className='form-label'>Cantidad de Productos</label>
+                    <br/>
                     <button type='button' onClick={addProductoField} className='btn btn-success ml-2'>+</button>
+                    <br/>
+                    <br/>
                     {productos.map((producto, index) => (
                         <div key={index} className='input-group mb-3'>
                             <select
@@ -117,9 +122,12 @@ const CreatePaq = () => {
                         </div>
                     ))}
                 </div>
-                <button type='submit' className='btn btn-primary'>Guardar</button>
+                <button type='submit' >Guardar</button>
             </form>
+            <br></br>
+                    <Link to="/admin/paquete" className='btn btn-secondary mt-2'>Regresar </Link>
         </div>
+        </Container>
     );
 };
 

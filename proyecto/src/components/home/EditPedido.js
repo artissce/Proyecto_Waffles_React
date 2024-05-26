@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import Container from '../Container';
 const URI = 'http://localhost:8000/pedidos/'
 
 
@@ -38,8 +39,10 @@ const EditPedido = ()=>{
     }
 
     return(
+        <Container>
         <div>
-            <h1>Edit pedido</h1>
+            <h1>Editar pedido</h1>
+            <br></br>
             <form onSubmit={update}>
                 <div className='mb-3'>
                     <label className='form=label'>Cliente</label>
@@ -61,10 +64,13 @@ const EditPedido = ()=>{
                         type="text" className='form-control'/>
                 </div>
                     
-                <button type="submit" className='btn btn-primary'>Update</button>
+                <button type="submit" >Update</button>
                 
             </form>
+            <br></br>
+            <Link to="/home/pedido" className='btn btn-secondary mt-2'>Regresar</Link>
         </div>
+        </Container>
     )
 }
 

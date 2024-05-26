@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import Container from '../../Container';
 const URI = 'http://localhost:8000/tipo/'
 
 
@@ -32,6 +33,7 @@ const EditTI = ()=>{
     }
 
     return(
+        <Container>
         <div align='center'>
             <h1>Edit tipo ingrediente</h1>
             <form onSubmit={update}>
@@ -40,7 +42,7 @@ const EditTI = ()=>{
                     <br/>
                     <input 
                         value={nombreTipo} onChange={(e)=>setNombreTipo(e.target.value)} 
-                        type="text" className='form-contUser'/>
+                        type="text" className='form-control'/>
                     <br/>
                     
                 </div>
@@ -48,7 +50,9 @@ const EditTI = ()=>{
                 <button type="submit" className='btn btn-primary'>Update</button>
                 
             </form>
-        </div>
+            <br></br>
+            <Link to="/admin/tipo" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
+        </div></Container>
     )
 }
 

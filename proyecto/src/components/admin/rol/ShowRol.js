@@ -2,6 +2,7 @@ import axios from 'axios'
 import {useState, useEffect} from 'react'
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 
+import Container from '../../Container';
 const URI = 'http://localhost:8000/roles/'
 
 const ShowRol = () => {
@@ -22,10 +23,10 @@ const ShowRol = () => {
     }
     //proc crear
     return(
-    <div className='container-fluid d-flex justify-content-center align-items-center' style={{ minHeight: '80vh' }}>
+        <Container>
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-10'>
-                    <Link to="/roles/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
+                    <Link to="/admin/roles/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
                     <div className="table-responsive">
                         <table className='table'>
                             <thead>
@@ -40,7 +41,7 @@ const ShowRol = () => {
                                         <td>{rol.idRol} </td>
                                         <td>{rol.nombreRol} </td>
                                         <td>
-                                            <Link to={`/roles/edit/${rol.idRol}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
+                                            <Link to={`/admin/roles/edit/${rol.idRol}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
                                             <button onClick={()=>deleteRol(rol.idRol)} className='btn btn-danger'><i className="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
@@ -48,9 +49,13 @@ const ShowRol = () => {
                             </tbody>
                         </table>
                     </div>
+                    <br></br>
+                <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                 </div>
+                
             </div>
-        </div>
+
+        </Container>
     )
 }
 export default ShowRol

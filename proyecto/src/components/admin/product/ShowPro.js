@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import Container from '../../Container';
 const URI = 'http://localhost:8000/producto/';
 //PROBLEMA CON MOSTRAR  LA RELACION CON LOS INGREDIENTES
 const ShowPro = () => {
@@ -32,10 +32,11 @@ const ShowPro = () => {
     };
 
     return (
+        <Container>
         <div className='container-fluid d-flex justify-content-center align-items-center' align='center' style={{ minHeight: '80vh' }}>
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-10'>
-                    <Link to="/producto/create" className='btn btn-primary mt-2 mb-2'>
+                    <Link to="/admin/producto/create" className='btn btn-primary mt-2 mb-2'>
                         <i className="fas fa-plus"></i>
                     </Link>
                     <div className="table-responsive">
@@ -71,7 +72,7 @@ const ShowPro = () => {
                                             )}
                                         </td>
                                         <td>
-                                            <Link to={`/producto/edit/${producto.idProducto}`} className='btn btn-info'>
+                                            <Link to={`/admin/producto/edit/${producto.idProducto}`} className='btn btn-info'>
                                                 <i className="fas fa-edit"></i>
                                             </Link>
                                             <button onClick={() => deletePro(producto.idProducto)} className='btn btn-danger'>
@@ -83,9 +84,12 @@ const ShowPro = () => {
                             </tbody>
                         </table>
                     </div>
+                    <br></br>
+                    <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                 </div>
             </div>
         </div>
+        </Container>
     );
 };
 

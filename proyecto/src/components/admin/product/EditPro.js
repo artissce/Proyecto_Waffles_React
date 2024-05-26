@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Container from '../../Container';
 
 const URI = 'http://localhost:8000/producto/';
 const URI_ING = 'http://localhost:8000/ing/';
@@ -85,6 +87,7 @@ const EditPro = () => {
     };
 
     return (
+        <Container>
         <div align='center'>
             <h1>Editar Producto</h1>
             <form onSubmit={updatePro}>
@@ -128,7 +131,10 @@ const EditPro = () => {
                 </div>
                 <div className='mb-3'>
                     <label className='form-label'>Cantidad de Ingredientes</label>
+                    <br/>
                     <button type='button' onClick={addIngredientField} className='btn btn-success ml-2'>+</button>
+                    <br/>
+                    <br/>
                     {Array.from({ length: cantIng }).map((_, index) => (
                         <div key={index} className='input-group mb-3'>
                             <select
@@ -145,9 +151,11 @@ const EditPro = () => {
                         </div>
                     ))}
                 </div>
-                <button type="submit" className='btn btn-primary'>Actualizar</button>
+                <button type="submit" >Actualizar</button>
             </form>
-        </div>
+            <br></br>
+            <Link to="/admin/producto" className='btn btn-secondary mt-2'>Regresar</Link>
+        </div></Container>
     );
 };
 

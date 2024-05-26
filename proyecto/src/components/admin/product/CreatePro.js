@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import Container from '../../Container';
 const URI = 'http://localhost:8000/producto/'
 const URI_ING = 'http://localhost:8000/ing/'
 
@@ -65,6 +66,7 @@ const CreatePro = () => {
     }
 
     return (
+        <Container>
         <div align='center'>
             <h1>Crear Producto</h1>
             <form onSubmit={store}>
@@ -110,7 +112,10 @@ const CreatePro = () => {
                 </div>
                 <div className='mb-3'>
                     <label className='form-label'>Cantidad de Ingredientes</label>
+                    <br></br>
                     <button type='button' onClick={addIngredientField} className='btn btn-success ml-2'>+</button>
+                    <br/>
+                    <br/>
                     {Array.from({ length: cantIng }).map((_, index) => (
                         <div key={index} className='input-group mb-3'>
                             <select
@@ -127,9 +132,12 @@ const CreatePro = () => {
                         </div>
                     ))}
                 </div>
-                <button type='submit' className='btn btn-primary'>Guardar</button>
+                <button type='submit' >Guardar</button>
             </form>
+            <br></br>
+            <Link to="/admin/producto" className='btn btn-secondary mt-2'>Regresar</Link>
         </div>
+        </Container>
     )
 }
 

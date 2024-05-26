@@ -3,7 +3,7 @@ import { useState } from 'react'
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
-
+import Container from '../Container';
 export function Formulario({ setUsuario }) {
     const [user, setUser] = useState("");
     const [pwd, setPwd] = useState("");
@@ -43,6 +43,7 @@ export function Formulario({ setUsuario }) {
     };
 
     return (
+        <Container>
         <section>
             <div className="alert-container">
                 {error && (
@@ -55,7 +56,9 @@ export function Formulario({ setUsuario }) {
             </div>
             <div className="form-container">
                 <form className='formulario' onSubmit={handleSubmit}>
+                    <img src={"../../logo.svg"} alt="Descripción de la imagen" style={{ width: '100px', height: '100px' }} />
                     <h1>Login</h1>
+                    <br/>
                     <div className="form-group">
                         <label htmlFor="text">Usuario</label>
                         <br />
@@ -66,9 +69,10 @@ export function Formulario({ setUsuario }) {
                         <br />
                         <input type="password" className="form-control" value={pwd} onChange={e => setPwd(e.target.value)} />
                     </div>
-                    <button type="submit" className="btn btn-default">Iniciar</button>
+                    <button type="submit" >Iniciar</button>
                 </form>
             </div>
         </section>
+        </Container>
     );
 }
