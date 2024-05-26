@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Container from '../../Container';
+import { Link } from 'react-router-dom';
 const ING_URI = 'http://localhost:8000/ing/';
 const TIPOS_URI = 'http://localhost:8000/tipo/';
 
@@ -40,6 +41,7 @@ const CreateIng = () => {
     };
 
     return (
+        <Container>
         <div align='center'>
             <h1>Create Ingrediente</h1>
             <form onSubmit={store}>
@@ -71,9 +73,11 @@ const CreateIng = () => {
                     </select>
                     <br/>
                 </div>
-                <button type="submit" className='btn btn-primary'>Enviar</button>
+                <button type="submit">Enviar</button>
             </form>
-        </div>
+            <br></br>
+            <Link to="/admin/ing" className='btn btn-secondary mt-2'>Regresar</Link>
+        </div></Container>
     );
 }
 

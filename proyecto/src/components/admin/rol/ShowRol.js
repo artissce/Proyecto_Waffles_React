@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {useState, useEffect} from 'react'
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Container from '../../Container';
 const URI = 'http://localhost:8000/roles/'
@@ -32,7 +32,8 @@ const ShowRol = () => {
                             <thead>
                                 <tr>
                                     <th scope="col" style={{ width: '20%' }}>idRol</th>
-                                    <th scope="col" style={{ width: '15%' }}>Nombre del rol</th>
+                                    <th scope="col" style={{ width: '35%' }}>Nombre del rol</th>
+                                    <th scope="col" style={{ width: '30%' }}>ACC</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,7 +51,7 @@ const ShowRol = () => {
                         </table>
                     </div>
                     <br></br>
-                <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
+                    <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                 </div>
                 
             </div>

@@ -61,7 +61,7 @@ label {
   font-size: 16px;
   font-weight: bold;
   background: linear-gradient(45deg, #ff438b, #ffa726); /* Gradiente animado #ff438b*/
-  -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 }
 

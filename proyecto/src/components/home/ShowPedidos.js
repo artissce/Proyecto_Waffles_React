@@ -27,7 +27,7 @@ const ShowPedidos = () => {
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-10'>
                     <h1>Pedidos</h1> 
-                    <Link to="/home/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
+                    <Link to="/home/pedido/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
                     <br></br><br></br>
                     <div className="table-responsive">
                         <table className='table'>
@@ -51,7 +51,7 @@ const ShowPedidos = () => {
                                         <td>{pedido.paquete} </td>
                                         <td>{pedido.estado} </td>
                                         <td>
-                                            <Link to={`/home/edit/${pedido.idPedido}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
+                                            <Link to={`/home/pedido/edit/${pedido.idPedido}`} className='btn btn-info'> <i className="fas fa-edit"></i></Link>
                                             <button onClick={()=>deletePedidos(pedido.idPedido)} className='btn btn-danger'><i className="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>

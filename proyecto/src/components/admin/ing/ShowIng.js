@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Container from '../../Container';
 
 const ING_URI = 'http://localhost:8000/ing/';
 
@@ -31,38 +32,48 @@ const ShowIng = () => {
     };
 
     return (
-        <div className='container-fluid d-flex justify-content-center align-items-center' align='center' style={{ minHeight: '80vh' }}>
-            <div className='row justify-content-center'>
-                <div className='col-12 col-lg-10'>
-                    <Link to="/ing/create" className='btn btn-primary mt-2 mb-2'><i className="fas fa-plus"></i></Link>
-                    <div className="table-responsive">
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th scope="col" style={{ width: '20%' }}>ID</th>
-                                    <th scope="col" style={{ width: '20%' }}>Nombre</th>
-                                    <th scope="col" style={{ width: '20%' }}>Tipo</th>
-                                    <th scope="col" style={{ width: '20%' }}>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Ingredientes.map(ingrediente => (
-                                    <tr key={ingrediente.idIng}>
-                                        <td>{ingrediente.idIng}</td>
-                                        <td>{ingrediente.nombre}</td>
-                                        <td>{ingrediente.idTipo}</td>
-                                        <td>
-                                            <Link to={`/ing/edit/${ingrediente.idIng}`} className='btn btn-info'><i className="fas fa-edit"></i></Link>
-                                            <button onClick={() => deleteIngrediente(ingrediente.idIng)} className='btn btn-danger'><i className="fas fa-trash-alt"></i></button>
-                                        </td>
+        <Container>
+            <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '80vh' }}>
+                <div className='row justify-content-center w-100'>
+                    <div className='col-12'>
+                        <Link to="/admin/ing/create" className='btn btn-primary mt-2 mb-2'>
+                            <i className="fas fa-plus"></i>
+                        </Link>
+                        <div className="table-responsive" style={{ maxHeight: '60vh', overflowY: 'scroll' }}>
+                            <table className='table table-striped'>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Acciones</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {Ingredientes.map(ingrediente => (
+                                        <tr key={ingrediente.idIng}>
+                                            <td>{ingrediente.idIng}</td>
+                                            <td>{ingrediente.nombre}</td>
+                                            <td>{ingrediente.idTipo}</td>
+                                            <td>
+                                                <Link to={`/admin/ing/edit/${ingrediente.idIng}`} className='btn btn-info'>
+                                                    <i className="fas fa-edit"></i>
+                                                </Link>
+                                                <button onClick={() => deleteIngrediente(ingrediente.idIng)} className='btn btn-danger'>
+                                                    <i className="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 };
 
