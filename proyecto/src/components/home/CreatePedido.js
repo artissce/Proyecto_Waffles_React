@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from '../Container';
 import { Link } from 'react-router-dom';
+
 const URI = 'http://localhost:8000/pedidos/';
 const URI_PAQUETES = 'http://localhost:8000/paquetes/';
 
@@ -28,19 +29,32 @@ const CreatePedido = () => {
     };
 
     const handlePaqueteChange = async (e) => {
-        const paqueteId = e.target.value;
-        setSelectedPaquete(paqueteId);
-        const res = await axios.get(`${URI_PAQUETES}/${paqueteId}`);
-        const paquete = res.data;
-        setProductos(paquete.assignedPro);
-        setIngredientesSeleccionados(paquete.assignedPro.map(producto => ({ productoId: producto.idProducto, ingredientes: [] })));
+        const idPaquete = e.target.value;
+        setSelectedPaquete(idPaquete);
+        if (idPaquete) {
+            const res = await axios.get(`${URI_PAQUETES}${idPaquete}`);
+            const paquete = res.data;
+            setProductos(paquete.assignedPro);
+            setIngredientesSeleccionados(paquete.assignedPro.map(producto => ({
+                idPaquete: producto.idProducto,
+                ingredientes: []
+            })));
+        } else {
+            setProductos([]);
+            setIngredientesSeleccionados([]);
+        }
     };
 
-    const handleIngredienteChange = (productoId, ingredienteId) => {
+    const handleIngredienteChange = (idProducto, idIng) => {
         setIngredientesSeleccionados(prevState =>
             prevState.map(item =>
-                item.productoId === productoId
-                    ? { ...item, ingredientes: [...item.ingredientes, ingredienteId] }
+                item.idProducto === idProducto
+                    ? {
+                        ...item,
+                        ingredientes: item.ingredientes.includes(idIng)
+                            ? item.ingredientes.filter(id => id !== idIng)
+                            : [...item.ingredientes, idIng]
+                    }
                     : item
             )
         );
@@ -51,7 +65,7 @@ const CreatePedido = () => {
         try {
             await axios.post(URI, {
                 cliente,
-                paquete: selectedPaquete,
+                paquetes: [selectedPaquete],
                 estado: 'En proceso',
                 ingredientesSeleccionados
             });

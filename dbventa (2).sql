@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2024 at 11:24 PM
+-- Generation Time: May 27, 2024 at 08:28 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -69,9 +69,9 @@ CREATE TABLE `paquetes` (
 --
 
 INSERT INTO `paquetes` (`idPaquete`, `nombre`, `precio`, `descripcion`, `cantidadProducto`) VALUES
-(20, 'Paquete de prueba', 51.00, 'Este es un paquete de prueba para update', 3),
-(24, 'Preuab500', 16.00, 'sisisinonono', 2),
-(25, 'prueba800', 80.00, 'sisisisisi', 2);
+(34, 'Paquete 1 Waffles', 25.00, 'Incluye 2 waffles\n1 Topping\n2 Jarabe', 1),
+(35, 'Paquete 2 Waffles', 30.00, 'Incluye 2 waffles\n2 toppings\n1 jarabe', 1),
+(36, 'Paquete 3 Waffles', 35.00, 'Incluye 3 waffles\n2 toppings\n2 jarabes', 1);
 
 -- --------------------------------------------------------
 
@@ -105,11 +105,6 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`idPedido`, `cliente`, `fecha`, `hora`, `paquete`, `estado`, `total`) VALUES
-(3, 'Ana', '0000-00-00', '18:15:37', 2, 'En proceso', 0),
-(4, 'Juan Pérez', '0000-00-00', '18:17:23', 2, 'En proceso', 0),
-(5, 'Juan Pérez', '0000-00-00', '18:17:39', 2, 'En proceso', 0),
-(6, 'Juan Pérez2', '0000-00-00', '18:55:18', 2, 'En proceso', 55),
-(7, 'Juan Pérez3', '2001-05-18', '19:02:08', 2, 'En proceso', 55),
 (8, 'Juan Pérez3', '2024-05-19', '19:06:43', 2, 'En proceso', 55),
 (9, 'Juan Pérez3', '0000-00-00', '19:08:09', 2, 'En proceso', 55),
 (10, 'Juan Pérez3', '2024-05-19', '19:10:03', 2, 'En proceso', 55),
@@ -135,11 +130,7 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`idProducto`, `nombre`, `precio`, `categoria`, `descripcion`, `cantIng`) VALUES
-(14, 'Producto de prueba', '10.99', 'Categoría de prueba', 'Descripción de prueba', 3),
-(15, 'Producto de prueba', '10.99', 'Categoría de prueba', 'Descripción de prueba', 3),
-(20, 'Producto de prueba2', '10.99', 'Categoría de prueba', 'Descripción de prueba', 3),
-(22, 'Prueba', '15.00', 'prueba', 'muy rico todo', 3),
-(23, 'prueba2', '15.00', 'Desayuno', 'Muy bueno sisis', 2);
+(33, 'Waffles', '10.00', 'Postre', 'Muy ricos waffles, recien hechos', 9);
 
 -- --------------------------------------------------------
 
@@ -157,20 +148,15 @@ CREATE TABLE `producto_ingredientes` (
 --
 
 INSERT INTO `producto_ingredientes` (`idProducto`, `idIng`) VALUES
-(14, 1),
-(14, 2),
-(14, 3),
-(15, 1),
-(15, 2),
-(15, 3),
-(20, 1),
-(20, 2),
-(20, 3),
-(22, 1),
-(22, 2),
-(22, 3),
-(23, 1),
-(23, 8);
+(33, 1),
+(33, 2),
+(33, 3),
+(33, 4),
+(33, 5),
+(33, 6),
+(33, 7),
+(33, 8),
+(33, 9);
 
 -- --------------------------------------------------------
 
@@ -189,13 +175,9 @@ CREATE TABLE `producto_paquetes` (
 --
 
 INSERT INTO `producto_paquetes` (`idProducto`, `idPaquete`, `cantidad`) VALUES
-(14, 24, 4),
-(15, 24, 5),
-(15, 25, 2),
-(20, 20, 2),
-(20, 25, 3),
-(22, 20, 1),
-(23, 20, 3);
+(33, 34, 2),
+(33, 35, 2),
+(33, 36, 3);
 
 -- --------------------------------------------------------
 
@@ -284,7 +266,8 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`idUsuario`, `nombre`, `correo`, `contrasena`, `idRol`) VALUES
 (1, 'Ana', 'ana@gmail.com', 'manchas123', 1),
 (2, 'Saúl Cervantes Candia', 'saul@gmail.com', 'saul123', 2),
-(31, 'Giova', 'giova@gmail.com', 'giova123', 2);
+(31, 'Giova', 'giova@gmail.com', 'giova123', 2),
+(38, 'Manchas', 'manchas@gmail.com', 'manchas123', 2);
 
 --
 -- Indexes for dumped tables
@@ -372,43 +355,43 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `ingredientes`
 --
 ALTER TABLE `ingredientes`
-  MODIFY `idIng` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `idIng` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `paquetes`
 --
 ALTER TABLE `paquetes`
-  MODIFY `idPaquete` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `idPaquete` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `idPedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idPedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `tiposingredientes`
 --
 ALTER TABLE `tiposingredientes`
-  MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
