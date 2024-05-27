@@ -3,30 +3,47 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Container from '../../Container';
 
-const URI = 'http://localhost:8000/producto/';
+const ING_URI = 'http://localhost:8000/ing/';
+const TIPOS_URI = 'http://localhost:8000/tipo/';
 
-const ShowPro = () => {
-    const [productos, setProductos] = useState([]);
+const ShowIng = () => {
+    const [ingredientes, setIngredientes] = useState([]);
+    const [tipos, setTipos] = useState({});
 
+    // Fetch ingredientes and tipos on mount
     useEffect(() => {
-        getPro();
+        getIngredientes();
+        getTipos();
     }, []);
 
-    const getPro = async () => {
+    const getIngredientes = async () => {
         try {
-            const res = await axios.get(URI);
-            setProductos(res.data);
+            const res = await axios.get(ING_URI);
+            setIngredientes(res.data);
         } catch (error) {
-            console.error('Error fetching products:', error);
+            console.error('Error fetching ingredientes:', error);
         }
     };
 
-    const deletePro = async (idProducto) => {
+    const getTipos = async () => {
         try {
-            await axios.delete(`${URI}${idProducto}`);
-            getPro();
+            const res = await axios.get(TIPOS_URI);
+            const tiposMap = res.data.reduce((acc, tipo) => {
+                acc[tipo.idTipo] = tipo.nombreTipo;
+                return acc;
+            }, {});
+            setTipos(tiposMap);
         } catch (error) {
-            console.error('Error deleting product:', error);
+            console.error('Error fetching tipos:', error);
+        }
+    };
+
+    const deleteIngrediente = async (idIng) => {
+        try {
+            await axios.delete(`${ING_URI}${idIng}`);
+            getIngredientes();
+        } catch (error) {
+            console.error('Error deleting ingrediente:', error);
         }
     };
 
@@ -35,46 +52,30 @@ const ShowPro = () => {
             <div className='d-flex justify-content-center align-items-center' style={{ minHeight: '80vh' }}>
                 <div className='row justify-content-center w-100'>
                     <div className='col-12'>
-                        <Link to="/admin/producto/create" className='btn btn-primary mt-2 mb-2'>
-                            <i className="fas fa-plus"></i> Crear Producto
+                        <Link to="/admin/ing/create" className='btn btn-primary mt-2 mb-2'>
+                            <i className="fas fa-plus"></i>
                         </Link>
                         <div className="table-responsive" style={{ maxHeight: '60vh', overflowY: 'scroll' }}>
                             <table className='table table-striped'>
-                                <thead className="thead-dark">
+                                <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Precio</th>
-                                        <th>Categoría</th>
-                                        <th>Descripción</th>
-                                        <th>Ingredientes</th>
-                                        <th>Acciones</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {productos.map((producto) => (
-                                        <tr key={producto.idProducto}>
-                                            <td>{producto.idProducto}</td>
-                                            <td>{producto.nombre}</td>
-                                            <td>{producto.precio}</td>
-                                            <td>{producto.categoria}</td>
-                                            <td>{producto.descripcion}</td>
+                                    {ingredientes.map(ingrediente => (
+                                        <tr key={ingrediente.idIng}>
+                                            <td>{ingrediente.idIng}</td>
+                                            <td>{ingrediente.nombre}</td>
+                                            <td>{tipos[ingrediente.idTipo] || 'Desconocido'}</td>
                                             <td>
-                                                {producto.assignedIng && Array.isArray(producto.assignedIng) ? (
-                                                    <ul className="list-unstyled">
-                                                        {producto.assignedIng.map((ingrediente) => (
-                                                            <li key={ingrediente.idIng}>{ingrediente.nombre}</li>
-                                                        ))}
-                                                    </ul>
-                                                ) : (
-                                                    <span>No hay ingredientes</span>
-                                                )}
-                                            </td>
-                                            <td>
-                                                <Link to={`/admin/producto/edit/${producto.idProducto}`} className='btn btn-info btn-sm mr-1'>
+                                                <Link to={`/admin/ing/edit/${ingrediente.idIng}`} className='btn btn-info'>
                                                     <i className="fas fa-edit"></i>
                                                 </Link>
-                                                <button onClick={() => deletePro(producto.idProducto)} className='btn btn-danger btn-sm'>
+                                                <button onClick={() => deleteIngrediente(ingrediente.idIng)} className='btn btn-danger'>
                                                     <i className="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
@@ -83,7 +84,7 @@ const ShowPro = () => {
                                 </tbody>
                             </table>
                         </div>
-                        <br></br>
+                        <br />
                         <Link to="/admin" className='btn btn-secondary mt-2'>Regresar al Menú Admin</Link>
                     </div>
                 </div>
@@ -92,4 +93,4 @@ const ShowPro = () => {
     );
 };
 
-export default ShowPro;
+export default ShowIng;

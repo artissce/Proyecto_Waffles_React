@@ -2,40 +2,39 @@
 import db from "../database/db.js";
 import { DataTypes } from "sequelize"; // Importar tipos de datos de Sequelize
 
-// Definir el modelo PedidoModel
 const PedidoModel = db.define('pedidos', {
-    // Definir los atributos del modelo
     idPedido: { 
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true, // Habilitar auto-incremento
+        autoIncrement: true,
     },
     cliente: { 
         type: DataTypes.STRING,
-        allowNull: false, // Añadir restricción NOT NULL si es necesario
+        allowNull: false,
     },
     fecha: {
-        type: DataTypes.DATEONLY, // Tipo de datos para la fecha (sin hora)
+        type: DataTypes.DATEONLY,
         allowNull: false,
     },
     hora: {
-        type: DataTypes.TIME, // Tipo de datos para la hora
+        type: DataTypes.TIME,
         allowNull: false,
-    },
-    paquete: { 
-        type: DataTypes.INTEGER,
-        allowNull: false, // Añadir restricción NOT NULL si es necesario
     },
     estado: { 
         type: DataTypes.STRING,
-        allowNull: false, // Añadir restricción NOT NULL si es necesario
+        allowNull: false,
     },
     total: { 
         type: DataTypes.FLOAT,
-        allowNull: false, // Añadir restricción NOT NULL si es necesario
+        allowNull: false,
     },
+    cantidadPaquetes: { 
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    }
 }, {
-    timestamps: false, // Evita la creación automática de createdAt y updatedAt
+    timestamps: false,
 });
+
 
 export default PedidoModel;

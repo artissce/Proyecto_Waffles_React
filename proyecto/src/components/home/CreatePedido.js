@@ -1,57 +1,119 @@
-import axios from 'axios'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Container';
-const URI = 'http://localhost:8000/pedidos/'
+import { Link } from 'react-router-dom';
+const URI = 'http://localhost:8000/pedidos/';
+const URI_PAQUETES = 'http://localhost:8000/paquetes/';
 
-const CreatePedido = ()=>{
-    const [cliente,setCliente]=useState('')
-    const [paquete,setPaquete]=useState('')
-    const [estado,setEstado]=useState('')
+const CreatePedido = () => {
+    const [cliente, setCliente] = useState('');
+    const [paquetes, setPaquetes] = useState([]);
+    const [selectedPaquete, setSelectedPaquete] = useState('');
+    const [productos, setProductos] = useState([]);
+    const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState([]);
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
+    useEffect(() => {
+        getPaquetes();
+    }, []);
 
-    //guardar
-    const store = async(e)=>{
-        e.preventDefault()
-        await axios.post(URI,{cliente:cliente,paquete:paquete,estado:estado})
-        navigate('/')
-    }
+    const getPaquetes = async () => {
+        try {
+            const res = await axios.get(URI_PAQUETES);
+            setPaquetes(res.data);
+        } catch (error) {
+            console.error('Error fetching paquetes:', error);
+        }
+    };
 
-    return(
+    const handlePaqueteChange = async (e) => {
+        const paqueteId = e.target.value;
+        setSelectedPaquete(paqueteId);
+        const res = await axios.get(`${URI_PAQUETES}/${paqueteId}`);
+        const paquete = res.data;
+        setProductos(paquete.assignedPro);
+        setIngredientesSeleccionados(paquete.assignedPro.map(producto => ({ productoId: producto.idProducto, ingredientes: [] })));
+    };
+
+    const handleIngredienteChange = (productoId, ingredienteId) => {
+        setIngredientesSeleccionados(prevState =>
+            prevState.map(item =>
+                item.productoId === productoId
+                    ? { ...item, ingredientes: [...item.ingredientes, ingredienteId] }
+                    : item
+            )
+        );
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post(URI, {
+                cliente,
+                paquete: selectedPaquete,
+                estado: 'En proceso',
+                ingredientesSeleccionados
+            });
+            navigate('/home/pedidos');
+        } catch (error) {
+            console.error('Error creating pedido:', error);
+        }
+    };
+
+    return (
         <Container>
-        <div>
-            <h1>Create pedido</h1>
-            <form onSubmit={store}>
-                <div className='mb-3'>
-                    <label className='form=label'>Cliente</label>
-                    <input 
-                        value={cliente} onChange={(e)=>setCliente(e.target.value)} 
-                        type="text" className='form-control'/>
-                    
+            <h1>Crear Pedido</h1>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label className="form-label">Cliente</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={cliente}
+                        onChange={(e) => setCliente(e.target.value)}
+                        required
+                    />
                 </div>
-                <div className='mb-3'>
-                    <label className='form=label'>Paquete</label>
-                    <input 
-                        value={paquete} onChange={(e)=>setPaquete(e.target.value)} 
-                        type="text" className='form-control'/>
+                <div className="mb-3">
+                    <label className="form-label">Paquete</label>
+                    <select
+                        className="form-select"
+                        value={selectedPaquete}
+                        onChange={handlePaqueteChange}
+                        required
+                    >
+                        <option value="">Selecciona un paquete</option>
+                        {paquetes.map(paquete => (
+                            <option key={paquete.idPaquete} value={paquete.idPaquete}>
+                                {paquete.nombre}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <div className='mb-3'>
-                <label className='form=label'>Estado</label>
-                    <input 
-                        value={estado} onChange={(e)=>setEstado(e.target.value)} 
-                        type="text" className='form-control'/>
-                </div>
-                    
-                <button type="submit">Enviar</button>
-                
+                {productos.map(producto => (
+                    <div key={producto.idProducto} className="mb-3">
+                        <label className="form-label">{producto.nombre}</label>
+                        {producto.assignedIng.map(ingrediente => (
+                            <div key={ingrediente.idIng} className="form-check">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    value={ingrediente.idIng}
+                                    onChange={() => handleIngredienteChange(producto.idProducto, ingrediente.idIng)}
+                                />
+                                <label className="form-check-label">
+                                    {ingrediente.nombre}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                ))}
+                <button type="submit" className="btn btn-primary">Crear Pedido</button>
             </form>
-            <br></br>
             <Link to="/home/pedido" className='btn btn-secondary mt-2'>Regresar</Link>
-        </div>
         </Container>
-    )
-}
+    );
+};
 
-export default CreatePedido 
+export default CreatePedido;

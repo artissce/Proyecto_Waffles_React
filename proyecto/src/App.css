@@ -54,11 +54,19 @@ body {
 }
 
 /* Estilo global para los labels */
-label {
+label{
   font-size: 16px;
   font-weight: bold;
   background: linear-gradient(45deg, #ff438b, #ffa726); /* Gradiente animado #ff438b*/
   background-clip: text;
+  color: transparent;
+}
+h1, h2, h3, h4, h5, h6, label {
+  font-size: 16px;
+  font-weight: bold;
+  background: linear-gradient(45deg, #ff438b, #ffa726); /* Gradiente animado */
+  background-clip: text;
+  -webkit-background-clip: text; /* Para soporte en navegadores Webkit */
   color: transparent;
 }
 
