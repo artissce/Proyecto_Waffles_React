@@ -12,7 +12,7 @@ const MenuHome = () => {
                         <table className="menu-table table table-striped">
                             <tbody>
                                 <tr>
-                                    <td><Link to="/home/pedido" className="btn btn-outline-primary btn-block">Gestionar Pedidos</Link></td>
+                                    <td><Link to="/home/pedidos" className="btn btn-outline-primary btn-block">Gestionar Pedidos</Link></td>
                                     <td><Link to="/home/menu" className="btn btn-outline-primary btn-block">Ver menu</Link></td>
                                 </tr>
                                 <tr>

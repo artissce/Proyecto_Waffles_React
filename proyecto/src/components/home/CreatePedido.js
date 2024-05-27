@@ -111,7 +111,7 @@ const CreatePedido = () => {
                 ))}
                 <button type="submit" className="btn btn-primary">Crear Pedido</button>
             </form>
-            <Link to="/home/pedido" className='btn btn-secondary mt-2'>Regresar</Link>
+            <Link to="/home/pedidos" className='btn btn-secondary mt-2'>Regresar</Link>
         </Container>
     );
 };

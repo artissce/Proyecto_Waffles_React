@@ -68,7 +68,7 @@ const EditPedido = ()=>{
                 
             </form>
             <br></br>
-            <Link to="/home/pedido" className='btn btn-secondary mt-2'>Regresar</Link>
+            <Link to="/home/pedidos" className='btn btn-secondary mt-2'>Regresar</Link>
         </div>
         </Container>
     )

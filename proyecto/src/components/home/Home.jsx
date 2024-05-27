@@ -9,9 +9,9 @@ export function Home(){
         <div>
             <Routes>
                 <Route path='/' element={<MenuHome/>}/>
-                <Route path='/pedido/' element={<ShowPedidos/>}/>
-                <Route path='/pedido/create' element={<CreatePedido/>}/>
-                <Route path='/pedido/edit/:idPedido' element={<EditPedido/>}/>
+                <Route path='/pedidos/' element={<ShowPedidos/>}/>
+                <Route path='/pedidos/create' element={<CreatePedido/>}/>
+                <Route path='/pedidos/edit/:idPedido' element={<EditPedido/>}/>
 
                 <Route path='/menu' element={<ShowMenu/>}/>
             </Routes>

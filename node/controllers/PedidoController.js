@@ -5,6 +5,51 @@ import IngredientesModel from "../models/IngredientesModel.js";
 import PedidoDetalleModel from "../models/PedidoDetalleModel.js"; // Importar el modelo de detalles del pedido
 
 /* METODOS PARA EL CRUD */
+import { Op } from 'sequelize'; // Importa Op de Sequelize para operadores de consulta
+
+// Mostrar todos los registros de pedidos con los paquetes, productos e ingredientes relacionados por fecha
+export const getAllPedidosByDate = async (req, res) => {
+    try {
+        const { fecha } = req.params; // Obtener la fecha de los parámetros de la solicitud
+
+        const pedidos = await PedidoModel.findAll({
+            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes'],
+            where: {
+                fecha: {
+                    [Op.eq]: fecha // Filtrar por la fecha proporcionada
+                }
+            },
+            include: [
+                {
+                    model: PaqueteModel,
+                    as: "assignedPaq",
+                    attributes: ['idPaquete', 'nombre', 'precio'],
+                    include: {
+                        model: ProductoModel,
+                        as: 'assignedPro',
+                        attributes: ['idProducto', 'nombre', 'cantIng']
+                    }
+                },
+                {
+                    model: PedidoDetalleModel,
+                    as: 'detalles',
+                    attributes: ['idProducto', 'idIng', 'cantidad'],
+                    include: [
+                        {
+                            model: IngredientesModel,
+                            as: 'ingrediente',
+                            attributes: ['nombre']
+                        }
+                    ]
+                }
+            ]
+        });
+        res.json(pedidos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 // Mostrar todos los registros de pedidos con los paquetes, productos e ingredientes relacionados
 export const getAllPedidos = async (req, res) => {
