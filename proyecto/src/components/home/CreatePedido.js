@@ -13,6 +13,7 @@ const CreatePedido = () => {
     const [paquetes, setPaquetes] = useState([]);
     const [selectedPaquetes, setSelectedPaquetes] = useState([]);
     const [productos, setProductos] = useState({});
+    const [ingredientesDisponibles, setIngredientesDisponibles] = useState({});
     const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState({});
     const navigate = useNavigate();
 
@@ -42,6 +43,10 @@ const CreatePedido = () => {
         delete newProductos[index];
         setProductos(newProductos);
 
+        const newIngredientesDisponibles = { ...ingredientesDisponibles };
+        delete newIngredientesDisponibles[index];
+        setIngredientesDisponibles(newIngredientesDisponibles);
+
         const newIngredientesSeleccionados = { ...ingredientesSeleccionados };
         delete newIngredientesSeleccionados[index];
         setIngredientesSeleccionados(newIngredientesSeleccionados);
@@ -60,34 +65,57 @@ const CreatePedido = () => {
                 const newProductos = { ...productos, [index]: paquete.assignedPro || [] };
                 setProductos(newProductos);
 
+                const newIngredientesDisponibles = { ...ingredientesDisponibles, [index]: {} };
                 const newIngredientesSeleccionados = { ...ingredientesSeleccionados, [index]: {} };
+
                 for (const producto of paquete.assignedPro) {
                     const resProd = await axios.get(`${URI_PRODUCTOS}${producto.idProducto}`);
                     const productoData = resProd.data;
-                    newIngredientesSeleccionados[index][producto.idProducto] = productoData.assignedIng.map(ing => ({
+                    newIngredientesDisponibles[index][producto.idProducto] = productoData.assignedIng.map(ing => ({
                         idIng: ing.idIng,
                         nombre: ing.nombre
                     }));
+                    newIngredientesSeleccionados[index][producto.idProducto] = [];
                 }
+                setIngredientesDisponibles(newIngredientesDisponibles);
                 setIngredientesSeleccionados(newIngredientesSeleccionados);
+                console.log('Ingredientes disponibles:', newIngredientesDisponibles);
             } catch (error) {
                 console.error('Error fetching paquete:', error);
             }
         }
     };
 
-    const handleIngredienteChange = (paqueteIndex, productoId, ingredienteId) => {
+    const handleIngredienteAdd = (paqueteIndex, productoId) => {
+        const selectedIngredientId = parseInt(document.getElementById(`select-${paqueteIndex}-${productoId}`).value);
         setIngredientesSeleccionados(prevState => {
             const newIngredientesSeleccionados = { ...prevState };
-            const ingredientes = newIngredientesSeleccionados[paqueteIndex][productoId] || [];
-            if (ingredientes.some(ing => ing.idIng === ingredienteId)) {
-                newIngredientesSeleccionados[paqueteIndex][productoId] = ingredientes.filter(ing => ing.idIng !== ingredienteId);
-            } else {
-                const ingrediente = ingredientesSeleccionados[paqueteIndex][productoId]?.find(ing => ing.idIng === ingredienteId);
+            if (!newIngredientesSeleccionados[paqueteIndex]) {
+                newIngredientesSeleccionados[paqueteIndex] = {};
+            }
+            if (!newIngredientesSeleccionados[paqueteIndex][productoId]) {
+                newIngredientesSeleccionados[paqueteIndex][productoId] = [];
+            }
+
+            const ingredientes = newIngredientesSeleccionados[paqueteIndex][productoId];
+            if (!ingredientes.some(ing => ing.idIng === selectedIngredientId)) {
+                const ingrediente = ingredientesDisponibles[paqueteIndex][productoId].find(ing => ing.idIng === selectedIngredientId);
                 if (ingrediente) {
                     newIngredientesSeleccionados[paqueteIndex][productoId] = [...ingredientes, ingrediente];
                 }
             }
+            console.log('Ingredientes seleccionados:', newIngredientesSeleccionados);
+            return newIngredientesSeleccionados;
+        });
+    };
+
+    const handleIngredienteRemove = (paqueteIndex, productoId, ingredienteId) => {
+        setIngredientesSeleccionados(prevState => {
+            const newIngredientesSeleccionados = { ...prevState };
+            if (newIngredientesSeleccionados[paqueteIndex] && newIngredientesSeleccionados[paqueteIndex][productoId]) {
+                newIngredientesSeleccionados[paqueteIndex][productoId] = newIngredientesSeleccionados[paqueteIndex][productoId].filter(ing => ing.idIng !== ingredienteId);
+            }
+            console.log('Ingredientes seleccionados después de eliminar:', newIngredientesSeleccionados);
             return newIngredientesSeleccionados;
         });
     };
@@ -95,24 +123,31 @@ const CreatePedido = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const formattedIngredientesSeleccionados = Object.values(ingredientesSeleccionados).flatMap(paquete =>
-                Object.entries(paquete).map(([productoId, ingredientes]) => ({
-                    productoId: parseInt(productoId),
-                    ingredientes: ingredientes.map(ing => ing.idIng)
-                }))
+            const formattedIngredientesSeleccionados = Object.entries(ingredientesSeleccionados).flatMap(([paqueteIndex, paquete]) =>
+                Object.entries(paquete).flatMap(([productoId, ingredientes]) =>
+                    ingredientes.map(ing => ({
+                        productoId: parseInt(productoId),
+                        ingredienteId: ing.idIng
+                    }))
+                )
             );
-
-            await axios.post(URI_PEDIDOS, {
+    
+            const pedidoData = {
                 cliente,
                 paquetes: selectedPaquetes,
                 estado: 'En proceso',
                 ingredientesSeleccionados: formattedIngredientesSeleccionados
-            });
+            };
+    
+            console.log('Datos del pedido:', pedidoData);
+    
+            await axios.post(URI_PEDIDOS, pedidoData);
             navigate('/home/pedidos');
         } catch (error) {
             console.error('Error creating pedido:', error);
         }
     };
+    
 
     return (
         <Container>
@@ -148,23 +183,36 @@ const CreatePedido = () => {
                         {productos[index]?.length > 0 && productos[index].map(producto => (
                             <div key={producto.idProducto} className="mb-3">
                                 <label className="form-label">{producto.nombre}</label>
-                                {ingredientesSeleccionados[index] && ingredientesSeleccionados[index][producto.idProducto]?.length > 0 ? (
-                                    ingredientesSeleccionados[index][producto.idProducto].map(ingrediente => (
-                                        <div key={ingrediente.idIng} className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                value={ingrediente.idIng}
-                                                onChange={() => handleIngredienteChange(index, producto.idProducto, ingrediente.idIng)}
-                                            />
-                                            <label className="form-check-label">
+                                <div className="d-flex">
+                                    <select id={`select-${index}-${producto.idProducto}`} className="form-select">
+                                        {ingredientesDisponibles[index] && ingredientesDisponibles[index][producto.idProducto]?.length > 0 ? (
+                                            ingredientesDisponibles[index][producto.idProducto].map(ingrediente => (
+                                                <option key={ingrediente.idIng} value={ingrediente.idIng}>
+                                                    {ingrediente.nombre}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="">No hay ingredientes disponibles</option>
+                                        )}
+                                    </select>
+                                    <button type="button" className="btn btn-primary ms-2" onClick={() => handleIngredienteAdd(index, producto.idProducto)}>
+                                        Agregar
+                                    </button>
+                                </div>
+                                <ul className="list-group mt-2">
+                                    {ingredientesSeleccionados[index] && ingredientesSeleccionados[index][producto.idProducto]?.length > 0 ? (
+                                        ingredientesSeleccionados[index][producto.idProducto].map(ingrediente => (
+                                            <li key={ingrediente.idIng} className="list-group-item d-flex justify-content-between align-items-center">
                                                 {ingrediente.nombre}
-                                            </label>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No hay ingredientes disponibles para este producto.</p>
-                                )}
+                                                <button type="button" className="btn btn-danger btn-sm" onClick={() => handleIngredienteRemove(index, producto.idProducto, ingrediente.idIng)}>
+                                                    Eliminar
+                                                </button>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <li className="list-group-item">No hay ingredientes seleccionados</li>
+                                    )}
+                                </ul>
                             </div>
                         ))}
                         <button type="button" className="btn btn-danger mb-3" onClick={() => removePaquete(index)}>Eliminar Paquete</button>

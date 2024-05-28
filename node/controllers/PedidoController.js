@@ -162,22 +162,24 @@ export const createPedido = async (req, res) => {
         await newPedido.addAssignedPaq(selectedPaquetes);
 
         // Manejar ingredientes seleccionados
+        console.log(`Ingredientes seleccionados recibidos: ${JSON.stringify(ingredientesSeleccionados)}`);
         for (const ing of ingredientesSeleccionados) {
-            for (const idIng of ing.ingredientes) {
-                await PedidoDetalleModel.create({
-                    idPedido: newPedido.idPedido,
-                    idProducto: ing.productoId,
-                    idIng: idIng,
-                    cantidad: 1 // Puedes ajustar la cantidad según tus necesidades
-                });
-            }
+            console.log(`Procesando productoId: ${ing.productoId}, ingredienteId: ${ing.ingredienteId}`);
+            await PedidoDetalleModel.create({
+                idPedido: newPedido.idPedido,
+                idProducto: ing.productoId,
+                idIng: ing.ingredienteId,
+                cantidad: 1 // Puedes ajustar la cantidad según tus necesidades
+            });
         }
 
         res.json({ message: "Pedido registrado correctamente" });
     } catch (error) {
+        console.error('Error creating pedido:', error);
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Actualizar un pedido
 export const updatePedido = async (req, res) => {
@@ -240,15 +242,15 @@ export const updatePedido = async (req, res) => {
             await pedido.addAssignedPaq(selectedPaquetes);
 
             // Manejar ingredientes seleccionados
+            console.log(`Ingredientes seleccionados recibidos: ${JSON.stringify(ingredientesSeleccionados)}`);
             for (const ing of ingredientesSeleccionados) {
-                for (const idIng of ing.ingredientes) {
-                    await PedidoDetalleModel.create({
-                        idPedido: idPedido,
-                        idProducto: ing.productoId,
-                        idIng: idIng,
-                        cantidad: 1 // Puedes ajustar la cantidad según tus necesidades
-                    });
-                }
+                console.log(`Procesando productoId: ${ing.productoId}, ingredienteId: ${ing.ingredienteId}`);
+                await PedidoDetalleModel.create({
+                    idPedido: idPedido,
+                    idProducto: ing.productoId,
+                    idIng: ing.ingredienteId,
+                    cantidad: 1 // Puedes ajustar la cantidad según tus necesidades
+                });
             }
 
             // Actualizar el total y cantidad de paquetes
@@ -266,6 +268,7 @@ export const updatePedido = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Eliminar un pedido
 export const deletePedido = async (req, res) => {
