@@ -9,6 +9,7 @@ import { HomeAdmin } from './components/admin/HomeAdmin';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 //import { Switch, BrowserRouter, Route,Router } from 'react-router-dom';
 
 function App() {
@@ -18,14 +19,7 @@ function App() {
     setUsuario(user);
   };
   return (
-   /* <div className="App">
-      {
-        /*!usuario.length > 0 ? <Formulario setUsuario={ setUsuario }/>  :  <Home/><HomeAdmin/>
-      }
-      <HomeAdmin/>
-    
-      
-   </div>*/
+   /* */
    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Formulario />} />

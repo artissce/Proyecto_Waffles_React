@@ -4,6 +4,8 @@ import CreatePedido from "./CreatePedido";
 import EditPedido from "./EditPedido";
 import MenuHome from "./MenuHome";
 import ShowMenu from "./ShowMenu";
+import Spreadsheet from "./excel/pedidos";
+import CorteDelDia from "./excel/CorteDelDia";
 export function Home(){
     return(
         <div>
@@ -12,6 +14,8 @@ export function Home(){
                 <Route path='/pedidos/' element={<ShowPedidos/>}/>
                 <Route path='/pedidos/create' element={<CreatePedido/>}/>
                 <Route path='/pedidos/edit/:idPedido' element={<EditPedido/>}/>
+                <Route path='/pedidos/excel' element={<Spreadsheet/>}/>
+                <Route path="/pedidos/excel/:fecha" element={<CorteDelDia />} />
 
                 <Route path='/menu' element={<ShowMenu/>}/>
             </Routes>

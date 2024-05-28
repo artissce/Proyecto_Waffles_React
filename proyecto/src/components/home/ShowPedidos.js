@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import Container from '../Container';
 
 const URI = 'http://localhost:8000/pedidos/';
-
+// Supongamos que la fecha es la actual
+const fecha2 = new Date().toISOString().slice(0, 10);
 const ShowPedido = () => {
     const [pedidos, setPedidos] = useState([]);
     const [fecha, setFecha] = useState('');
@@ -152,6 +153,8 @@ const ShowPedido = () => {
                                 </tbody>
                             </table>
                         </div>
+                        <br />
+                         <Link to={`/home/pedidos/excel/${fecha2}`} className="btn btn-secondary mt-2">Corte del día</Link>
                         <br />
                         <Link to="/home/" className="btn btn-secondary mt-2">Regresar al Menú Admin</Link>
                     </div>
