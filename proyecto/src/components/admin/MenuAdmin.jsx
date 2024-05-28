@@ -25,6 +25,13 @@ const MenuAdmin = () => {
                                 </tr>
                                 <tr>
                                     <td colSpan="2" className="text-center" style={{ paddingTop: '20px' }}>
+                                        <Link to="/admin/consulta/"   className="btn" style={{ transition: 'background 0.3s, color 0.3s' }}>
+                                            CONSULTAR CORTE
+                                        </Link>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2" className="text-center" style={{ paddingTop: '20px' }}>
                                         <Link to="/" className="btn btn-secondary btn-block mt-2" style={{ transition: 'background 0.3s, color 0.3s' }}>
                                             SALIR
                                         </Link>

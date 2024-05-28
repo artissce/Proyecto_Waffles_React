@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const URI_PEDIDOS_FECHA = 'http://localhost:8000/pedidos/date/';
 
-const CorteDelDia = () => {
+const Corte = () => {
     const { fecha } = useParams(); // Obtener la fecha de los parámetros de la URL
     const [pedidos, setPedidos] = useState([]);
     const spreadsheetRef = useRef(null);
@@ -83,11 +83,11 @@ const CorteDelDia = () => {
                 </SheetsDirective>
             </SpreadsheetComponent>
             <div className="buttons-container">
-                <Link to="/home/pedidos" className="btn btn-secondary mt-2">Regresar a Pedidos</Link>
+                <Link to="/admin/consulta" className="btn btn-secondary mt-2">Regresar</Link>
                 
             </div>
         </div>
     );
 };
 
-export default CorteDelDia;
+export default Corte;

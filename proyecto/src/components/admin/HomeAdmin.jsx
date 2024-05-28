@@ -19,6 +19,8 @@ import ShowPro from './product/ShowPro';
 import ShowPaq from './paq/ShowPaq';
 import CreatePaq from './paq/CreatePaq';
 import EditPaq from './paq/EditPaq';
+import ConsulCorte from './consulCorte';
+import Corte from './Corte';
 
 export function HomeAdmin() {
     return (
@@ -43,6 +45,8 @@ export function HomeAdmin() {
                 <Route path="paquete" element={<ShowPaq />} />
                 <Route path="paquete/create" element={<CreatePaq />} />
                 <Route path="paquete/edit/:idPaquete" element={<EditPaq />} />
+                <Route path="consulta/" element={<ConsulCorte />} />
+                <Route path="consulta/:fecha" element={<Corte/>} />
             </Routes>
         </div>
     );
