@@ -6,6 +6,34 @@ import PedidoDetalleModel from "../models/PedidoDetalleModel.js"; // Importar el
 
 /* METODOS PARA EL CRUD */
 import { Op } from 'sequelize'; // Importa Op de Sequelize para operadores de consulta
+// Controlador para obtener detalles de pedidos
+export const getAllPedidoDetalles = async (req, res) => {
+    try {
+        const pedidoDetalles = await PedidoDetalleModel.findAll({
+            include: [
+                {
+                    model: ProductoModel,
+                    as: 'producto',
+                    attributes: ['nombre']
+                },
+                {
+                    model: IngredientesModel,
+                    as: 'ingrediente',
+                    attributes: ['nombre']
+                }
+            ]
+        });
+
+        // Añade un console.log para ver los datos recuperados
+        console.log('Pedido Detalles Recuperados:', JSON.stringify(pedidoDetalles, null, 2));
+
+        res.json(pedidoDetalles);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 
 // Mostrar todos los registros de pedidos con los paquetes, productos e ingredientes relacionados por fecha
 export const getAllPedidosByDate = async (req, res) => {

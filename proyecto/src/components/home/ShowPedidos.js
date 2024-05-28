@@ -156,7 +156,7 @@ const ShowPedido = () => {
                         <br />
                          <Link to={`/home/pedidos/excel/${fecha2}`} className="btn btn-secondary mt-2">Corte del día</Link>
                         <br />
-                        <Link to="/home/" className="btn btn-secondary mt-2">Regresar al Menú Admin</Link>
+                        <Link to="/home/" className="btn btn-secondary mt-2">Regresar al Menú </Link>
                     </div>
                 </div>
             </div>

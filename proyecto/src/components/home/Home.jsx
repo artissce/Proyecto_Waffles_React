@@ -6,6 +6,7 @@ import MenuHome from "./MenuHome";
 import ShowMenu from "./ShowMenu";
 import Spreadsheet from "./excel/pedidos";
 import CorteDelDia from "./excel/CorteDelDia";
+import PedidosChart from "./excel/PedidosChart";
 export function Home(){
     return(
         <div>
@@ -16,6 +17,7 @@ export function Home(){
                 <Route path='/pedidos/edit/:idPedido' element={<EditPedido/>}/>
                 <Route path='/pedidos/excel' element={<Spreadsheet/>}/>
                 <Route path="/pedidos/excel/:fecha" element={<CorteDelDia />} />
+                <Route path="/pedidos/excel/chart" element={<PedidosChart />} />
 
                 <Route path='/menu' element={<ShowMenu/>}/>
             </Routes>

@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { SpreadsheetComponent, SheetsDirective, SheetDirective, RangesDirective, RangeDirective, wrap } from '@syncfusion/ej2-react-spreadsheet';
+import { SpreadsheetComponent, SheetsDirective, SheetDirective, RangesDirective, RangeDirective, ColumnDirective,ColumnsDirective,getFormatFromType } from '@syncfusion/ej2-react-spreadsheet';
 import '@syncfusion/ej2-react-spreadsheet/styles/material.css';
 import './Spreadsheet.css';
 
+import { Link } from 'react-router-dom';
 const URI_PEDIDOS_FECHA = 'http://localhost:8000/pedidos/date/';
 
 const CorteDelDia = () => {
     const { fecha } = useParams(); // Obtener la fecha de los parámetros de la URL
     const [pedidos, setPedidos] = useState([]);
     const spreadsheetRef = useRef(null);
+   
 
     useEffect(() => {
         const fetchPedidos = async () => {
@@ -57,6 +59,8 @@ const CorteDelDia = () => {
             spreadsheetRef.current.cellFormat({ fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle', backgroundColor: '#ff8026', color: '#ffffff' }, 'A1:I1'); // Estilo para el encabezado
             spreadsheetRef.current.cellFormat({ textAlign: 'center', verticalAlign: 'middle' }, 'A2:I100'); // Estilo para las celdas de datos
             spreadsheetRef.current.wrap('A2:I100', true);
+            //spreadsheetRef.insertChart(chartDetails)
+            
             spreadsheetRef.current.refresh();
         }
     }, [pedidos]);
@@ -75,6 +79,10 @@ const CorteDelDia = () => {
                     </SheetDirective>
                 </SheetsDirective>
             </SpreadsheetComponent>
+            <div className="buttons-container">
+                <Link to="/home/pedidos" className="btn btn-secondary mt-2">Regresar a Pedidos</Link>
+                
+            </div>
         </div>
     );
 };

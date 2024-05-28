@@ -36,6 +36,7 @@ const ShowMenu = () => {
     return (
         <Container>
             <div className='show-paq-container'>
+                <h1>Menu</h1>
                 <div className="table-responsive">
                     <table className='table'>
                         <thead>
@@ -54,7 +55,7 @@ const ShowMenu = () => {
                                     <td>{paquete.idPaquete}</td>
                                     <td>{paquete.nombre}</td>
                                     <td>{paquete.precio}</td>
-                                    <td className="description-cell">{paquete.descripcion}</td>
+                                    <td style={{ width: '300px', wordWrap: 'break-word', whiteSpace: 'normal' }}>{paquete.descripcion}</td>
                                     <td>{paquete.cantidadProducto}</td>
                                     <td>
                                         {paquete.assignedPro.map((producto) => (

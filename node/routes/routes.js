@@ -1,5 +1,5 @@
 import express from "express";
-import { createPedido, deletePedido, getAllPedidos, getAllPedidosByDate, getPedido, updatePedido } from "../controllers/PedidoController.js";
+import { createPedido, deletePedido, getAllPedidoDetalles, getAllPedidos, getAllPedidosByDate, getPedido, updatePedido } from "../controllers/PedidoController.js";
 import { createRol, deleteRol, getAllRol, getRol, updateRol } from "../controllers/RolController.js";
 import { createUsuario, deleteUsuario, getAllUsuario, getUsuario, updateUsuario, authenticateUser } from "../controllers/UsuarioController.js";
 import { createTipo, deleteTipo, getAllTipo, getTipo, updateTipo } from "../controllers/TipoIngredientesController.js";
@@ -58,6 +58,7 @@ ProRouter.delete('/:idProducto', deletePro);
 
 const PaqRouter = express.Router();
 PaqRouter.get('/', getAllPaquete);
+PaqRouter.get('/detalles/', getAllPedidoDetalles);
 PaqRouter.get('/:idPaquete', getPaquete);
 PaqRouter.post('/', createPaquete);
 PaqRouter.put('/:idPaquete', updatePaquete);
