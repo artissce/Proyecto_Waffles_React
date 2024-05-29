@@ -26,7 +26,7 @@ const ConsulCorte = () => {
                     </label>
                     <br/>
                     <br/>
-                    <Link to={`/admin/consulta/${fecha}`} className="btn btn-primary">
+                    <Link to={`/admin/consulta/${fecha}`} className="btn btn-outline-primary btn-block">
                         Ver Total de Ventas
                     </Link>
                     <div className="buttons-container">

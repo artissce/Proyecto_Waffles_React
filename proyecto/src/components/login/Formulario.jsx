@@ -60,7 +60,7 @@ export function Formulario({ setUsuario }) {
                     <h1>Login</h1>
                     <br/>
                     <div className="form-group">
-                        <label htmlFor="text">Usuario</label>
+                        <label htmlFor="text">Correo</label>
                         <br />
                         <input type="text" className="form-control" value={user} onChange={e => setUser(e.target.value)} />
                     </div>

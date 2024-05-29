@@ -36,7 +36,7 @@ const ShowMenu = () => {
     return (
         <Container>
             <div className='show-paq-container'>
-                <h1>Menu</h1>
+                <h1>Menú</h1>
                 <div className="table-responsive">
                     <table className='table'>
                         <thead>

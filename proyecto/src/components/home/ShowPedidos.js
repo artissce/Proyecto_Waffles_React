@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import Container from '../Container';
 
 const URI = 'http://localhost:8000/pedidos/';
-// Supongamos que la fecha es la actual
-const fecha2 = new Date().toISOString().slice(0, 10);
+
 const ShowPedido = () => {
     const [pedidos, setPedidos] = useState([]);
-    const [fecha, setFecha] = useState('');
+    const [fecha, setFecha] = useState(new Date().toISOString().slice(0, 10)); // Set initial date to today's date
+    const [noPedidos, setNoPedidos] = useState(false);
 
     useEffect(() => {
         if (fecha) {
@@ -22,6 +22,7 @@ const ShowPedido = () => {
         try {
             const res = await axios.get(URI);
             setPedidos(res.data);
+            setNoPedidos(res.data.length === 0);
         } catch (error) {
             console.error('Error fetching pedidos:', error);
         }
@@ -31,6 +32,7 @@ const ShowPedido = () => {
         try {
             const res = await axios.get(`${URI}date/${fecha}`);
             setPedidos(res.data);
+            setNoPedidos(res.data.length === 0);
         } catch (error) {
             console.error('Error fetching pedidos by date:', error);
         }
@@ -95,66 +97,71 @@ const ShowPedido = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {pedidos.map((pedido) => (
-                                        <tr key={pedido.idPedido}>
-                                            <td>{pedido.idPedido}</td>
-                                            <td>{pedido.cliente}</td>
-                                            <td>{pedido.fecha}</td>
-                                            <td>{pedido.hora}</td>
-                                            <td>{pedido.estado}</td>
-                                            <td>${pedido.total}</td>
-                                            <td>{pedido.cantidadPaquetes}</td>
-                                            <td>
-                                                {pedido.assignedPaq?.map((paquete) => (
-                                                    <div key={paquete.idPaquete}>
-                                                        <strong>{paquete.nombre}</strong> - ${paquete.precio}
-                                                        <ul>
-                                                            {paquete.assignedPro?.map((producto) => (
-                                                                <li key={producto.idProducto}>
-                                                                    {producto.nombre} - Ingredientes:
-                                                                    <ul>
-                                                                        {pedido.detalles
-                                                                            .filter(detalle => detalle.idProducto === producto.idProducto)
-                                                                            .map((detalle) => (
-                                                                                <li key={detalle.idIng}>
-                                                                                    {detalle.ingrediente?.nombre || 'Ingrediente no encontrado'}
-                                                                                </li>
-                                                                            ))}
-                                                                    </ul>
-                                                            </li>
-                                                            
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                ))}
-                                            </td>
-                                            <td>
-                                                <Link to={`/home/pedidos/edit/${pedido.idPedido}`} className="btn btn-info mb-1">
-                                                    <i className="fas fa-edit"></i>
-                                                </Link>
-                                                <br/>
-                                                <button onClick={() => deletePedido(pedido.idPedido)} className="btn btn-danger mb-1">
-                                                    <i className="fas fa-trash-alt"></i>
-                                                </button>
-                                                <br/>
-                                                <br/>
-                                                <label>Estado:</label>
-                                                <br/>
-                                                <button onClick={() => updatePedidoEstado(pedido.idPedido, 'Completado')} className="btn btn-success mb-1">
-                                                    <i className="fas fa-check"></i>
-                                                </button>
-                                                <br/>
-                                                <button onClick={() => updatePedidoEstado(pedido.idPedido, 'Cancelado')} className="btn btn-warning">
-                                                    <i className="fas fa-minus-circle"></i>
-                                                </button>
-                                            </td>
+                                    {pedidos.length > 0 ? (
+                                        pedidos.map((pedido) => (
+                                            <tr key={pedido.idPedido}>
+                                                <td>{pedido.idPedido}</td>
+                                                <td>{pedido.cliente}</td>
+                                                <td>{pedido.fecha}</td>
+                                                <td>{pedido.hora}</td>
+                                                <td>{pedido.estado}</td>
+                                                <td>${pedido.total}</td>
+                                                <td>{pedido.cantidadPaquetes}</td>
+                                                <td>
+                                                    {pedido.assignedPaq?.map((paquete) => (
+                                                        <div key={paquete.idPaquete}>
+                                                            <strong>{paquete.nombre}</strong> - ${paquete.precio}
+                                                            <ul>
+                                                                {paquete.assignedPro?.map((producto) => (
+                                                                    <li key={producto.idProducto}>
+                                                                        {producto.nombre} - Ingredientes:
+                                                                        <ul>
+                                                                            {pedido.detalles
+                                                                                .filter(detalle => detalle.idProducto === producto.idProducto)
+                                                                                .map((detalle) => (
+                                                                                    <li key={detalle.idIng}>
+                                                                                        {detalle.ingrediente?.nombre || 'Ingrediente no encontrado'}
+                                                                                    </li>
+                                                                                ))}
+                                                                        </ul>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    ))}
+                                                </td>
+                                                <td>
+                                                    <Link to={`/home/pedidos/edit/${pedido.idPedido}`} className="btn btn-info mb-1">
+                                                        <i className="fas fa-edit"></i>
+                                                    </Link>
+                                                    <br/>
+                                                    <button onClick={() => deletePedido(pedido.idPedido)} className="btn btn-danger mb-1">
+                                                        <i className="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <br/>
+                                                    <br/>
+                                                    <label>Estado:</label>
+                                                    <br/>
+                                                    <button onClick={() => updatePedidoEstado(pedido.idPedido, 'Completado')} className="btn btn-success mb-1">
+                                                        <i className="fas fa-check"></i>
+                                                    </button>
+                                                    <br/>
+                                                    <button onClick={() => updatePedidoEstado(pedido.idPedido, 'Cancelado')} className="btn btn-warning">
+                                                        <i className="fas fa-minus-circle"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="9" className="text-center">No hay pedidos para esta fecha</td>
                                         </tr>
-                                    ))}
+                                    )}
                                 </tbody>
                             </table>
                         </div>
                         <br />
-                         <Link to={`/home/pedidos/excel/${fecha2}`} className="btn btn-secondary mt-2">Corte del día</Link>
+                        <Link to={`/home/pedidos/excel/${fecha}`} className="btn btn-secondary mt-2">Corte del día</Link>
                         <br />
                         <Link to="/home/" className="btn btn-secondary mt-2">Regresar al Menú </Link>
                     </div>
