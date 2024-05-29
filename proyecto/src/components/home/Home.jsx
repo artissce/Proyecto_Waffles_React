@@ -17,7 +17,7 @@ export function Home(){
                 <Route path='/pedidos/edit/:idPedido' element={<EditPedido/>}/>
                 <Route path='/pedidos/excel' element={<Spreadsheet/>}/>
                 <Route path="/pedidos/excel/:fecha" element={<CorteDelDia />} />
-                <Route path="/pedidos/excel/chart" element={<PedidosChart />} />
+                <Route path="/pedidos/chart" element={<PedidosChart />} />
 
                 <Route path='/menu' element={<ShowMenu/>}/>
             </Routes>

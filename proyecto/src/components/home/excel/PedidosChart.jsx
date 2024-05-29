@@ -73,12 +73,22 @@ const PedidosChart = () => {
 
     return (
         <Container>
-        <div>
-            <Bar data={chartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Pedidos Detalle' } } }} />
-        </div>
-        <div className="buttons-container">
+            <div style={{ width: '100%', height: '600px' }}>
+                <Bar 
+                    data={chartData} 
+                    options={{ 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { position: 'top' }, 
+                            title: { display: true, text: 'Pedidos Detalle' } 
+                        } 
+                    }} 
+                />
+            </div>
+            <div className="buttons-container">
                 <Link to="/home/pedidos/" className="btn btn-secondary mt-2">Regresar a pedidos</Link>
-        </div>
+            </div>
         </Container>
     );
 };
