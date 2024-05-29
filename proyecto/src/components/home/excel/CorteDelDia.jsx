@@ -84,7 +84,9 @@ const CorteDelDia = () => {
             </SpreadsheetComponent>
             <div className="buttons-container">
                 <Link to="/home/pedidos" className="btn btn-secondary mt-2">Regresar a Pedidos</Link>
-                
+            </div>
+            <div className="buttons-container">
+                <Link to="/home/pedidos/excel/chart" className="btn btn-secondary mt-2">Ir a grafica</Link>
             </div>
         </div>
     );

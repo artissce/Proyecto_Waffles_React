@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import Container from '../../Container';
-
+import { Link } from 'react-router-dom';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const URI_PEDIDOS = 'http://localhost:8000/pedidos/';
@@ -75,6 +75,9 @@ const PedidosChart = () => {
         <Container>
         <div>
             <Bar data={chartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Pedidos Detalle' } } }} />
+        </div>
+        <div className="buttons-container">
+                <Link to="/home/pedidos/" className="btn btn-secondary mt-2">Regresar a pedidos</Link>
         </div>
         </Container>
     );
