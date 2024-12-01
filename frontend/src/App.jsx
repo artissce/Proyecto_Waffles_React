@@ -1,30 +1,28 @@
-import logo from './logo.svg';
-import { BrowserRouter, Route, Routes } from 'react-router-dom'; // Importa BrowserRouter aquí
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import {Formulario} from './components/login/Formulario'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Formulario } from './components/login/Formulario';
 import { Home } from './components/home/Home';
-import { useState } from 'react';
 import { HomeAdmin } from './components/admin/HomeAdmin';
-import React from 'react';
+import PaymentForm from './components/user/PaymentForm'; // Importar PaymentForm
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
-//import { Switch, BrowserRouter, Route,Router } from 'react-router-dom';
 
 function App() {
   const [usuario, setUsuario] = useState(null);
+
   const handleLogin = (user) => {
     // Actualizar el estado del componente padre con el usuario autenticado
     setUsuario(user);
   };
+
   return (
-   /* */
-   <BrowserRouter>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Formulario />} />
-        <Route path="/admin/*" element={<HomeAdmin />} />
-        <Route path="/home/*" element={<Home />} />
+        <Route path="/" element={<Formulario />} /> {/* Ruta principal */}
+        <Route path="/admin/*" element={<HomeAdmin />} /> {/* Ruta para el admin */}
+        <Route path="/home/*" element={<Home />} /> {/* Ruta para el usuario común */}
+        <Route path="/payment" element={<PaymentForm />} /> {/* Nueva ruta para el formulario de pago */}
+        <Route path="/payment-confirmation" element={<PaymentForm />} /> {/* Nueva ruta para el formulario de pago */} 
       </Routes>
     </BrowserRouter>
   );

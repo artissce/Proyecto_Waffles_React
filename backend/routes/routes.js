@@ -7,6 +7,7 @@ import { createIng, deleteIng, getAllIng, getIng, updateIng } from "../controlle
 //import { createPI, deletePI, getAllPI, getPI, updatePI } from "../controllers/Producto_IngredienteController.js";
 import { createPro,deletePro,getAllPro,getPro,updatePro } from "../controllers/ProductoController.js";
 import { createPaquete,deletePaquete,getAllPaquete,getPaquete,updatePaquete } from "../controllers/PaqueteController.js";
+import { createPago,getAllPagos,getPagoById,updatePago,deletePago } from "../controllers/PagoController.js";
 
 
 const PedidoRouter = express.Router();
@@ -70,6 +71,13 @@ PedidoRouter.get('/:idPedido', getPedido);
 PedidoRouter.post('/', createPedido);
 PedidoRouter.put('/:idPedido', updatePedido);
 PedidoRouter.delete('/:idPedido', deletePedido);
+
+const PagosRouter=express.Router();
+PagosRouter.post("/", createPago); // Crear un pago
+PagosRouter.get("/", getAllPagos); // Obtener todos los pagos
+PagosRouter.get("/:idPago", getPagoById); // Obtener un pago por ID
+PagosRouter.put("/:idPago", updatePago); // Actualizar un pago
+PagosRouter.delete("/:idPago", deletePago); // Eliminar un pago
 // Exportar los routers
 export const Routers = {
   PedidoRouter,
@@ -78,6 +86,7 @@ export const Routers = {
   TipoRouter,
   IngRouter,
   ProRouter,
-  PaqRouter
+  PaqRouter,
+  PagosRouter
   //PIRouter,
 };

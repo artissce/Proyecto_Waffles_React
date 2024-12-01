@@ -95,7 +95,18 @@ PedidoModel.hasMany(PedidoDetalleModel,
 PedidoDetalleModel.belongsTo(PedidoModel, { foreignKey: 'idPedido' });
 PedidoDetalleModel.belongsTo(ProductoModel, { foreignKey: 'idProducto' });
 PedidoDetalleModel.belongsTo(IngredientesModel, { foreignKey: 'idIng' });
-  
+import PagoModel from "./models/PagoModel.js";
+
+// Relación: Un pedido puede tener múltiples pagos
+PedidoModel.hasMany(PagoModel, {
+  as: "pagos", // Alias para acceder a los pagos de un pedido
+  foreignKey: "idPedido", // Llave foránea en la tabla 'pagos'
+});
+
+PagoModel.belongsTo(PedidoModel, {
+  as: "pedido", // Alias para acceder al pedido desde un pago
+  foreignKey: "idPedido", // Llave foránea
+});  
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -108,6 +119,7 @@ app.use('/tipo', Routers.TipoRouter);
 app.use('/ing', Routers.IngRouter);
 app.use('/producto',Routers.ProRouter);
 app.use('/paquete',Routers.PaqRouter);
+app.use('/pagos',Routers.PagosRouter);
 
 //app.use('/pi', Routers.PIRouter);
 (async () => {

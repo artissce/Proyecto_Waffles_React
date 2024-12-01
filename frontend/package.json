@@ -7,6 +7,8 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@stripe/react-stripe-js": "^3.0.0",
+    "@stripe/stripe-js": "^5.2.0",
     "@syncfusion/ej2-base": "^25.2.5",
     "@syncfusion/ej2-react-spreadsheet": "^25.2.6",
     "@testing-library/jest-dom": "^5.17.0",
