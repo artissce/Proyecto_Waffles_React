@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Container from '../Container';
+import ExcelJS from 'exceljs';
 
 const URI = 'http://localhost:8000/pedidos/';
 
@@ -17,6 +18,69 @@ const ShowPedido = () => {
             getPedidos();
         }
     }, [fecha]);
+
+    const handleDownload = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Pedidos');
+
+        // Agregar encabezados con estilo
+        worksheet.columns = [
+            { header: 'ID Pedido', key: 'idPedido', width: 10 },
+            { header: 'Cliente', key: 'cliente', width: 15 },
+            { header: 'Fecha', key: 'fecha', width: 12 },
+            { header: 'Hora', key: 'hora', width: 10 },
+            { header: 'Estado', key: 'estado', width: 13 },
+            { header: 'Total', key: 'total', width: 10 },
+            { header: 'Cantidad Paquetes', key: 'cantidadPaquetes', width: 20 },
+            { header: 'Paquetes', key: 'assignedPaq', width: 50 },
+            { header: 'Detalles', key: 'detalles', width: 50 },
+        ];
+
+        worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+        worksheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: '4F81BD' },
+        };
+        worksheet.getRow(1).alignment = { horizontal: 'center', vertical: 'middle' };
+
+        const pedidosParaDescarga = pedidos.map((pedido) => ({
+            idPedido: pedido.idPedido,
+            cliente: pedido.cliente,
+            fecha: pedido.fecha,
+            hora: pedido.hora,
+            estado: pedido.estado,
+            total: pedido.total,
+            cantidadPaquetes: pedido.cantidadPaquetes,
+            assignedPaq: pedido.assignedPaq.map((paq) => `${paq.nombre} - $${paq.precio}`).join(', '),
+            detalles: pedido.detalles.map((detalle) => `${detalle.ingrediente?.nombre || 'Ingrediente no encontrado'}`).join(', '),
+        }));
+
+        // Agregar filas con bordes
+        pedidosParaDescarga.forEach((pedido) => {
+            worksheet.addRow(pedido);
+        });
+
+        worksheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell) => {
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        // Descargar archivo
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Pedidos_${fecha}.xlsx`;
+        link.click();
+    };
 
     const getPedidos = async () => {
         try {
@@ -161,7 +225,7 @@ const ShowPedido = () => {
                             </table>
                         </div>
                         <br />
-                        <Link to={`/home/pedidos/excel/${fecha}`} className="btn btn-secondary mt-2">Corte del día</Link>
+                        <Link onClick={handleDownload} className="btn btn-secondary mt-2"> Corte del Dia</Link>
                         <br />
                         <Link to="/home/" className="btn btn-secondary mt-2">Regresar al Menú </Link>
                         <br/>
