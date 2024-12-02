@@ -46,7 +46,7 @@ export function HomeAdmin() {
                 <Route path="paquete/create" element={<CreatePaq />} />
                 <Route path="paquete/edit/:idPaquete" element={<EditPaq />} />
                 <Route path="consulta/" element={<ConsulCorte />} />
-                <Route path="consulta/:fecha" element={<Corte/>} />
+                
             </Routes>
         </div>
     );
