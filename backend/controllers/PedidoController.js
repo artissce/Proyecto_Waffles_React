@@ -2,11 +2,13 @@ import PedidoModel from "../models/PedidoModel.js";
 import PaqueteModel from "../models/PaqueteModel.js";
 import ProductoModel from "../models/ProductoModel.js";
 import IngredientesModel from "../models/IngredientesModel.js";
-import PedidoDetalleModel from "../models/PedidoDetalleModel.js"; // Importar el modelo de detalles del pedido
+import PedidoDetalleModel from "../models/PedidoDetalleModel.js";
+import PagoModel from "../models/PagoModel.js"; // Nuevo modelo para pagos
+import { Op } from "sequelize";
 
 /* METODOS PARA EL CRUD */
-import { Op } from 'sequelize'; // Importa Op de Sequelize para operadores de consulta
-// Controlador para obtener detalles de pedidos
+
+// Obtener todos los detalles de los pedidos
 export const getAllPedidoDetalles = async (req, res) => {
     try {
         const pedidoDetalles = await PedidoDetalleModel.findAll({
@@ -24,7 +26,6 @@ export const getAllPedidoDetalles = async (req, res) => {
             ]
         });
 
-        // Añade un console.log para ver los datos recuperados
         console.log('Pedido Detalles Recuperados:', JSON.stringify(pedidoDetalles, null, 2));
 
         res.json(pedidoDetalles);
@@ -35,18 +36,102 @@ export const getAllPedidoDetalles = async (req, res) => {
 
 
 
-// Mostrar todos los registros de pedidos con los paquetes, productos e ingredientes relacionados por fecha
+// Obtener todos los pedidos
+export const getAllPedidos = async (req, res) => {
+    try {
+        const pedidos = await PedidoModel.findAll({
+            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes', 'metodoPago', 'estadoPago'],
+            include: [
+                {
+                    model: PaqueteModel,
+                    as: "assignedPaq",
+                    attributes: ['idPaquete', 'nombre', 'precio'],
+                    include: {
+                        model: ProductoModel,
+                        as: 'assignedPro',
+                        attributes: ['idProducto', 'nombre']
+                    }
+                },
+                {
+                    model: PedidoDetalleModel,
+                    as: 'detalles',
+                    attributes: ['idProducto', 'idIng', 'cantidad'],
+                    include: [
+                        {
+                            model: IngredientesModel,
+                            attributes: ['nombre']
+                        }
+                    ]
+                },
+                {
+                    model: PagoModel,
+                    attributes: ['idPago', 'monto', 'fechaHora', 'idTransaccion']
+                }
+            ]
+        });
+
+        res.json(pedidos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Obtener un pedido por ID
+export const getPedido = async (req, res) => {
+    try {
+        const pedido = await PedidoModel.findByPk(req.params.idPedido, {
+            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes', 'metodoPago', 'estadoPago'],
+            include: [
+                {
+                    model: PaqueteModel,
+                    as: "assignedPaq",
+                    attributes: ['idPaquete', 'nombre', 'precio'],
+                    include: {
+                        model: ProductoModel,
+                        as: 'assignedPro',
+                        attributes: ['idProducto', 'nombre']
+                    }
+                },
+                {
+                    model: PedidoDetalleModel,
+                    as: 'detalles',
+                    attributes: ['idProducto', 'idIng', 'cantidad'],
+                    include: [
+                        {
+                            model: IngredientesModel,
+                            attributes: ['nombre']
+                        }
+                    ]
+                },
+                {
+                    model: PagoModel,
+                    attributes: ['idPago', 'monto', 'fechaHora', 'idTransaccion']
+                }
+            ]
+        });
+
+        if (!pedido) {
+            return res.status(404).json({ message: 'Pedido no encontrado' });
+        }
+
+        res.json(pedido);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+/* METODOS PARA EL CRUD */
+
+// Obtener todos los pedidos por fecha
 export const getAllPedidosByDate = async (req, res) => {
     try {
-        const { fecha } = req.params; // Obtener la fecha de los parámetros de la solicitud
+        const { fecha } = req.params;
 
         const pedidos = await PedidoModel.findAll({
-            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes'],
-            where: {
-                fecha: {
-                    [Op.eq]: fecha // Filtrar por la fecha proporcionada
-                }
-            },
+            where: { fecha: { [Op.eq]: fecha } },
+            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes', 'metodoPago', 'estadoPago'],
             include: [
                 {
                     model: PaqueteModel,
@@ -62,237 +147,180 @@ export const getAllPedidosByDate = async (req, res) => {
                     model: PedidoDetalleModel,
                     as: 'detalles',
                     attributes: ['idProducto', 'idIng', 'cantidad'],
-                    include: [
-                        {
-                            model: IngredientesModel,
-                            as: 'ingrediente',
-                            attributes: ['nombre']
-                        }
-                    ]
-                }
-            ]
-        });
-        res.json(pedidos);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-
-// Mostrar todos los registros de pedidos con los paquetes, productos e ingredientes relacionados
-export const getAllPedidos = async (req, res) => {
-    try {
-        const pedidos = await PedidoModel.findAll({
-            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes'],
-            include: [
-                {
-                    model: PaqueteModel,
-                    as: "assignedPaq",
-                    attributes: ['idPaquete', 'nombre', 'precio'],
                     include: {
-                        model: ProductoModel,
-                        as: 'assignedPro',
-                        attributes: ['idProducto', 'nombre']
+                        model: IngredientesModel,
+                        attributes: ['nombre']
                     }
                 },
                 {
-                    model: PedidoDetalleModel,
-                    as: 'detalles',
-                    attributes: ['idProducto', 'idIng', 'cantidad'],
-                    include: [
-                        {
-                            model: IngredientesModel,
-                            attributes: ['nombre']
-                        }
-                    ]
+                    model: PagoModel,
+                    as: 'pagos', // Usa el alias que definiste en la asociación
+                    attributes: ['idPago', 'monto', 'fechaHora', 'idTransaccion']
                 }
             ]
         });
+
         res.json(pedidos);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error obteniendo pedidos por fecha:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
     }
 };
 
-// Mostrar un pedido por ID con los paquetes, productos e ingredientes relacionados
-export const getPedido = async (req, res) => {
-    try {
-        const pedido = await PedidoModel.findByPk(req.params.idPedido, {
-            attributes: ['idPedido', 'cliente', 'fecha', 'hora', 'estado', 'total', 'cantidadPaquetes'],
-            include: [
-                {
-                    model: PaqueteModel,
-                    as: "assignedPaq",
-                    attributes: ['idPaquete', 'nombre', 'precio'],
-                    include: {
-                        model: ProductoModel,
-                        as: 'assignedPro',
-                        attributes: ['idProducto', 'nombre']
-                    }
-                },
-                {
-                    model: PedidoDetalleModel,
-                    as: 'detalles',
-                    attributes: ['idProducto', 'idIng', 'cantidad'],
-                    include: [
-                        {
-                            model: IngredientesModel,
-                            attributes: ['nombre']
-                        }
-                    ]
-                }
-            ]
-        });
-        res.json(pedido);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
+// Crear un pedido
 // Crear un pedido
 export const createPedido = async (req, res) => {
     try {
-        const { cliente, paquetes, estado, ingredientesSeleccionados } = req.body;
+        const { cliente, paquetes, estado, metodoPago, ingredientesSeleccionados, totalPagado, token } = req.body;
 
+        // Validar paquetes seleccionados
         const selectedPaquetes = await PaqueteModel.findAll({
-            where: {
-                idPaquete: paquetes
-            },
-            include: {
-                model: ProductoModel,
-                as: 'assignedPro',
-                include: {
-                    model: IngredientesModel,
-                    as: 'assignedIng'
-                }
-            }
+            where: { idPaquete: paquetes },
+            include: { model: ProductoModel, as: 'assignedPro' },
         });
 
         if (!selectedPaquetes || selectedPaquetes.length !== paquetes.length) {
-            return res.status(404).json({ message: 'Uno o más paquetes no encontrados' });
+            return res.status(404).json({ message: 'Uno o más paquetes seleccionados no existen.' });
         }
 
-        const hoy = new Date();
-        const fechaFormateada = hoy.toISOString().slice(0, 10);
-        const horaActual = hoy.toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City' });
-
+        // Calcular total
         const total = selectedPaquetes.reduce((acc, paquete) => acc + paquete.precio, 0);
 
+        // Crear el pedido
         const newPedido = await PedidoModel.create({
             cliente,
-            fecha: fechaFormateada,
-            hora: horaActual,
-            estado,
+            fecha: new Date().toISOString().slice(0, 10),
+            hora: new Date().toLocaleTimeString("es-MX", { timeZone: "America/Mexico_City" }),
+            estado: estado || "En proceso",
             total,
-            cantidadPaquetes: paquetes.length
+            cantidadPaquetes: paquetes.length,
+            metodoPago,
+            estadoPago: metodoPago === "Tarjeta" ? 1 : 0, // Estado del pago basado en el método
         });
 
-        await newPedido.addAssignedPaq(selectedPaquetes);
+        // Relacionar paquetes con el pedido
+        if (selectedPaquetes.length > 0) {
+            await newPedido.addAssignedPaq(selectedPaquetes);
+        }
 
-        // Manejar ingredientes seleccionados
-        console.log(`Ingredientes seleccionados recibidos: ${JSON.stringify(ingredientesSeleccionados)}`);
+        // Crear detalles del pedido
         for (const ing of ingredientesSeleccionados) {
-            console.log(`Procesando productoId: ${ing.productoId}, ingredienteId: ${ing.ingredienteId}`);
             await PedidoDetalleModel.create({
                 idPedido: newPedido.idPedido,
                 idProducto: ing.productoId,
                 idIng: ing.ingredienteId,
-                cantidad: 1 // Puedes ajustar la cantidad según tus necesidades
+                cantidad: ing.cantidad || 1,
             });
         }
 
-        res.json({ message: "Pedido registrado correctamente" });
+        // Manejar pagos con tarjeta
+        let idTransaccion = null;
+
+        if (metodoPago === "Tarjeta") {
+            const stripe = require("stripe")("tu-clave-secreta-de-stripe"); // Sustituye con tu clave de Stripe
+            try {
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: Math.round(totalPagado * 100), // Stripe trabaja con centavos
+                    currency: "mxn",
+                    payment_method: token, // El token generado por el frontend
+                    confirmation_method: "manual",
+                    confirm: true,
+                });
+
+                idTransaccion = paymentIntent.id;
+
+                // Verificar estado del pago
+                if (paymentIntent.status === "succeeded") {
+                    await PagoModel.create({
+                        idPedido: newPedido.idPedido,
+                        monto: totalPagado || total,
+                        fechaHora: new Date(),
+                        idTransaccion,
+                    });
+                } else {
+                    throw new Error("El pago con tarjeta no se completó.");
+                }
+            } catch (error) {
+                console.error("Error procesando el pago con Stripe:", error.message);
+                throw new Error("Error procesando el pago con tarjeta.");
+            }
+        }
+
+        res.json({
+            message: "Pedido creado correctamente.",
+            idPedido: newPedido.idPedido,
+        });
     } catch (error) {
-        console.error('Error creating pedido:', error);
-        res.status(500).json({ message: error.message });
+        console.error("Error creando el pedido:", error);
+        res.status(500).json({ message: "Ocurrió un error al crear el pedido." });
     }
 };
+
+
 
 
 // Actualizar un pedido
 export const updatePedido = async (req, res) => {
     try {
-        const { paquetes, estado, cliente, ingredientesSeleccionados } = req.body;
+        const { paquetes, estado, cliente, metodoPago, ingredientesSeleccionados, totalPagado, idTransaccion } = req.body;
         const { idPedido } = req.params;
 
-        console.log(`Actualizando pedido ${idPedido} con cliente: ${cliente}, estado: ${estado}, paquetes: ${paquetes}`);
-
-        const pedido = await PedidoModel.findByPk(idPedido, {
-            include: {
-                model: PaqueteModel,
-                as: 'assignedPaq',
-                include: {
-                    model: ProductoModel,
-                    as: 'assignedPro',
-                    include: {
-                        model: IngredientesModel,
-                        as: 'assignedIng'
-                    }
-                }
-            }
-        });
+        const pedido = await PedidoModel.findByPk(idPedido);
 
         if (!pedido) {
             return res.status(404).json({ message: 'Pedido no encontrado' });
         }
 
-        console.log(`Pedido encontrado: ${JSON.stringify(pedido)}`);
+        const selectedPaquetes = await PaqueteModel.findAll({ where: { idPaquete: paquetes } });
+        const total = selectedPaquetes.reduce((acc, paquete) => acc + paquete.precio, 0);
 
-        // Actualizar campos del pedido
-        await pedido.update({ cliente, estado });
+        // Actualizar los datos del pedido
+        await pedido.update({
+            cliente,
+            estado,
+            metodoPago,
+            total,
+            cantidadPaquetes: paquetes.length,
+        });
 
-        if (paquetes && paquetes.length > 0) {
-            const selectedPaquetes = await PaqueteModel.findAll({
-                where: {
-                    idPaquete: paquetes
-                },
-                include: {
-                    model: ProductoModel,
-                    as: 'assignedPro',
-                    include: {
-                        model: IngredientesModel,
-                        as: 'assignedIng'
-                    }
-                }
+        // Actualizar los paquetes asignados
+        await pedido.setAssignedPaq(selectedPaquetes);
+
+        // Actualizar los detalles del pedido
+        for (const ing of ingredientesSeleccionados) {
+            await PedidoDetalleModel.upsert({
+                idPedido,
+                idProducto: ing.productoId,
+                idIng: ing.ingredienteId,
+                cantidad: ing.cantidad || 1,
             });
-
-            if (!selectedPaquetes || selectedPaquetes.length !== paquetes.length) {
-                return res.status(404).json({ message: 'Uno o más paquetes no encontrados' });
-            }
-
-            console.log(`Paquetes seleccionados: ${JSON.stringify(selectedPaquetes)}`);
-
-            // Eliminar relaciones existentes
-            await pedido.setAssignedPaq([]);
-            await PedidoDetalleModel.destroy({ where: { idPedido: idPedido } }); // Eliminar detalles anteriores
-
-            // Añadir los nuevos paquetes
-            await pedido.addAssignedPaq(selectedPaquetes);
-
-            // Manejar ingredientes seleccionados
-            console.log(`Ingredientes seleccionados recibidos: ${JSON.stringify(ingredientesSeleccionados)}`);
-            for (const ing of ingredientesSeleccionados) {
-                console.log(`Procesando productoId: ${ing.productoId}, ingredienteId: ${ing.ingredienteId}`);
-                await PedidoDetalleModel.create({
-                    idPedido: idPedido,
-                    idProducto: ing.productoId,
-                    idIng: ing.ingredienteId,
-                    cantidad: 1 // Puedes ajustar la cantidad según tus necesidades
-                });
-            }
-
-            // Actualizar el total y cantidad de paquetes
-            const total = selectedPaquetes.reduce((acc, paquete) => acc + paquete.precio, 0);
-            await pedido.update({ total, cantidadPaquetes: paquetes.length });
-
-            console.log(`Pedido actualizado con nuevos paquetes y total: ${total}`);
-        } else {
-            console.log('Actualizando pedido sin cambiar los paquetes');
         }
 
-        res.json({ message: 'Pedido actualizado correctamente' });
+        // Manejar el registro de pago
+        if (metodoPago === "Tarjeta") {
+            const existingPago = await PagoModel.findOne({ where: { idPedido } });
+            if (existingPago) {
+                await existingPago.update({
+                    monto: totalPagado || total,
+                    idTransaccion,
+                    fechaHora: new Date(),
+                });
+            } else {
+                await PagoModel.create({
+                    idPedido,
+                    monto: totalPagado || total,
+                    idTransaccion,
+                    fechaHora: new Date(),
+                });
+            }
+        } else {
+            // Si el método cambia a efectivo, eliminar el pago
+            await PagoModel.destroy({ where: { idPedido } });
+        }
+
+        res.json({ message: "Pedido actualizado correctamente." });
     } catch (error) {
-        console.error('Error actualizando el pedido:', error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -301,7 +329,7 @@ export const updatePedido = async (req, res) => {
 // Eliminar un pedido
 export const deletePedido = async (req, res) => {
     try {
-        const idPedido = req.params.idPedido;
+        const { idPedido } = req.params;
 
         const pedido = await PedidoModel.findByPk(idPedido);
 
@@ -309,15 +337,12 @@ export const deletePedido = async (req, res) => {
             return res.status(404).json({ message: 'Pedido no encontrado' });
         }
 
-        await pedido.setAssignedPaq([]);
-        await PedidoDetalleModel.destroy({ where: { idPedido: idPedido } }); // Eliminar detalles del pedido
+        await PedidoDetalleModel.destroy({ where: { idPedido } });
+        await PagoModel.destroy({ where: { idPedido } });
+        await pedido.destroy();
 
-        await PedidoModel.destroy({
-            where: { idPedido: idPedido }
-        });
-
-        res.json({ message: 'Pedido eliminado correctamente' });
+        res.json({ message: "Pedido eliminado correctamente." });
     } catch (error) {
-        res.status500.json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
