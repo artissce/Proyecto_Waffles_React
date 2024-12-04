@@ -120,6 +120,14 @@ app.use('/ing', Routers.IngRouter);
 app.use('/producto',Routers.ProRouter);
 app.use('/paquete',Routers.PaqRouter);
 app.use('/pagos',Routers.PagosRouter);
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`Request to ${req.method} ${req.url} took ${duration}ms`);
+  });
+  next();
+});
 
 //app.use('/pi', Routers.PIRouter);
 (async () => {

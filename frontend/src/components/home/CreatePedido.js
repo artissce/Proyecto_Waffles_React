@@ -22,9 +22,13 @@ const CreatePedido = () => {
     }, []);
 
     const getPaquetes = async () => {
+        const start = Date.now();
         try {
             const res = await axios.get(URI_PAQUETES);
+            const duration = Date.now() - start;
+            console.log(`getPaquetes Request took ${duration}ms`);
             setPaquetes(res.data);
+            return res.data;
         } catch (error) {
             console.error('Error fetching paquetes:', error);
         }
