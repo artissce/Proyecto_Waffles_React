@@ -15,9 +15,13 @@ const ShowPaq = () => {
 
     // Procedimiento para obtener todos los paquetes
     const getPaquetes = async () => {
+        const start = Date.now();
         try {
             const res = await axios.get(URI);
+            const duration = Date.now() - start;
             setPaquetes(res.data);
+            console.log(`Paquetes request took ${duration}ms`);
+            return res.data;
         } catch (error) {
             console.error('Error fetching paquetes:', error);
         }

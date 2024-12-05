@@ -103,10 +103,14 @@ const ShowPedido = () => {
     };
 
     const getPedidosByFecha = async (fecha) => {
+        const start = Date.now();
         try {
             const res = await axios.get(`${URI}date/${fecha}`);
+            const duration = Date.now() - start;
             setPedidos(res.data);
             setNoPedidos(res.data.length === 0);
+            console.log(`Pedidos request took ${duration}ms`);
+            return res.data;
         } catch (error) {
             console.error('Error fetching pedidos by date:', error);
         }

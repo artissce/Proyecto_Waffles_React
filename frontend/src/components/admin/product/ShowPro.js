@@ -13,9 +13,13 @@ const ShowPro = () => {
     }, []);
 
     const getPro = async () => {
+        const start = Date.now();
         try {
             const res = await axios.get(URI);
+            const duration = Date.now() - start;
             setProductos(res.data);
+            console.log(`Productos request took ${duration}ms`);
+            return res.data;
         } catch (error) {
             console.error('Error fetching products:', error);
         }

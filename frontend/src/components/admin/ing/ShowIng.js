@@ -17,9 +17,13 @@ const ShowIng = () => {
     }, []);
 
     const getIngredientes = async () => {
+        const start = Date.now();
         try {
             const res = await axios.get(ING_URI);
+            const duration = Date.now() - start;
             setIngredientes(res.data);
+            console.log(`Ingredientes request took ${duration}ms`);
+            return res.data;
         } catch (error) {
             console.error('Error fetching ingredientes:', error);
         }

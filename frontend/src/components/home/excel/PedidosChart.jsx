@@ -16,8 +16,10 @@ const PedidosChart = () => {
 
     useEffect(() => {
         const fetchPedidos = async () => {
+            const start = Date.now();
             try {
                 const res = await axios.get(URI_PEDIDOS);
+                const duration = Date.now() - start;
                 const pedidos = res.data;
 
                 const paqueteCounts = {};
@@ -63,6 +65,8 @@ const PedidosChart = () => {
                         },
                     ],
                 });
+                console.log(`Grafica request took ${duration}ms`);
+                return res.data;
             } catch (error) {
                 console.error('Error fetching pedidos:', error);
             }
