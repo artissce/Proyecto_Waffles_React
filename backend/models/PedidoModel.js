@@ -31,7 +31,15 @@ const PedidoModel = db.define('pedidos', {
     cantidadPaquetes: { 
         type: DataTypes.INTEGER,
         allowNull: false,
-    }
+    },
+    metodoPago: { 
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    estadoPago: { 
+        type: DataTypes.BOOLEAN, // Sequelize maneja BOOLEAN como TINYINT(1) en MySQL.
+        allowNull: false,
+    },
 }, {
     timestamps: false,
 });
