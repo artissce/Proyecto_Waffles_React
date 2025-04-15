@@ -4,7 +4,8 @@ import './App.css';
 import { Formulario } from './components/login/Formulario';
 import { Home } from './components/home/Home';
 import { HomeAdmin } from './components/admin/HomeAdmin';
-import PaymentForm from './components/user/PaymentForm'; // Importar PaymentForm
+import PaymentForm from './components/PaymentForm'; // Importar PaymentForm
+import ConfirmacionPago from './components/user/ConfirmacionPago';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
         <Route path="/admin/*" element={<HomeAdmin />} /> {/* Ruta para el admin */}
         <Route path="/home/*" element={<Home />} /> {/* Ruta para el usuario común */}
         <Route path="/payment" element={<PaymentForm />} /> {/* Nueva ruta para el formulario de pago */}
-        <Route path="/payment-confirmation" element={<PaymentForm />} /> {/* Nueva ruta para el formulario de pago */} 
+        <Route path="/payment-confirmation" element={<ConfirmacionPago />} /> {/* Nueva ruta para el formulario de pago */} 
       </Routes>
     </BrowserRouter>
   );

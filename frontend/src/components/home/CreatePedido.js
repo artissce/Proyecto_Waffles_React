@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from '../Container';
-import { Link } from 'react-router-dom';
+import PaymentForm from '../PaymentForm'; // Componente de Stripe para pagos con tarjeta
 
 const URI_PEDIDOS = 'http://localhost:8000/pedidos/';
 const URI_PAQUETES = 'http://localhost:8000/paquete/';
@@ -15,6 +15,9 @@ const CreatePedido = () => {
     const [productos, setProductos] = useState({});
     const [ingredientesDisponibles, setIngredientesDisponibles] = useState({});
     const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState({});
+    const [metodoPago, setMetodoPago] = useState('Efectivo');
+    const [monto, setMonto] = useState(0);
+    const [pedidoId, setPedidoId] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +32,22 @@ const CreatePedido = () => {
             console.error('Error fetching paquetes:', error);
         }
     };
+
+    const handleIngredienteRemove = (paqueteIndex, productoId, ingredienteId) => {
+        setIngredientesSeleccionados((prevState) => {
+            const newIngredientesSeleccionados = { ...prevState };
+            if (
+                newIngredientesSeleccionados[paqueteIndex] &&
+                newIngredientesSeleccionados[paqueteIndex][productoId]
+            ) {
+                newIngredientesSeleccionados[paqueteIndex][productoId] = newIngredientesSeleccionados[
+                    paqueteIndex
+                ][productoId].filter((ing) => ing.idIng !== ingredienteId);
+            }
+            return newIngredientesSeleccionados;
+        });
+    };
+    
 
     const addPaquete = () => {
         setSelectedPaquetes([...selectedPaquetes, '']);
@@ -73,13 +92,12 @@ const CreatePedido = () => {
                     const productoData = resProd.data;
                     newIngredientesDisponibles[index][producto.idProducto] = productoData.assignedIng.map(ing => ({
                         idIng: ing.idIng,
-                        nombre: ing.nombre
+                        nombre: ing.nombre,
                     }));
                     newIngredientesSeleccionados[index][producto.idProducto] = [];
                 }
                 setIngredientesDisponibles(newIngredientesDisponibles);
                 setIngredientesSeleccionados(newIngredientesSeleccionados);
-                console.log('Ingredientes disponibles:', newIngredientesDisponibles);
             } catch (error) {
                 console.error('Error fetching paquete:', error);
             }
@@ -87,7 +105,9 @@ const CreatePedido = () => {
     };
 
     const handleIngredienteAdd = (paqueteIndex, productoId) => {
-        const selectedIngredientId = parseInt(document.getElementById(`select-${paqueteIndex}-${productoId}`).value);
+        const selectedIngredientId = parseInt(
+            document.getElementById(`select-${paqueteIndex}-${productoId}`).value
+        );
         setIngredientesSeleccionados(prevState => {
             const newIngredientesSeleccionados = { ...prevState };
             if (!newIngredientesSeleccionados[paqueteIndex]) {
@@ -99,23 +119,16 @@ const CreatePedido = () => {
 
             const ingredientes = newIngredientesSeleccionados[paqueteIndex][productoId];
             if (!ingredientes.some(ing => ing.idIng === selectedIngredientId)) {
-                const ingrediente = ingredientesDisponibles[paqueteIndex][productoId].find(ing => ing.idIng === selectedIngredientId);
+                const ingrediente = ingredientesDisponibles[paqueteIndex][productoId].find(
+                    ing => ing.idIng === selectedIngredientId
+                );
                 if (ingrediente) {
-                    newIngredientesSeleccionados[paqueteIndex][productoId] = [...ingredientes, ingrediente];
+                    newIngredientesSeleccionados[paqueteIndex][productoId] = [
+                        ...ingredientes,
+                        ingrediente,
+                    ];
                 }
             }
-            console.log('Ingredientes seleccionados:', newIngredientesSeleccionados);
-            return newIngredientesSeleccionados;
-        });
-    };
-
-    const handleIngredienteRemove = (paqueteIndex, productoId, ingredienteId) => {
-        setIngredientesSeleccionados(prevState => {
-            const newIngredientesSeleccionados = { ...prevState };
-            if (newIngredientesSeleccionados[paqueteIndex] && newIngredientesSeleccionados[paqueteIndex][productoId]) {
-                newIngredientesSeleccionados[paqueteIndex][productoId] = newIngredientesSeleccionados[paqueteIndex][productoId].filter(ing => ing.idIng !== ingredienteId);
-            }
-            console.log('Ingredientes seleccionados después de eliminar:', newIngredientesSeleccionados);
             return newIngredientesSeleccionados;
         });
     };
@@ -127,7 +140,7 @@ const CreatePedido = () => {
                 Object.entries(paquete).flatMap(([productoId, ingredientes]) =>
                     ingredientes.map(ing => ({
                         productoId: parseInt(productoId),
-                        ingredienteId: ing.idIng
+                        ingredienteId: ing.idIng,
                     }))
                 )
             );
@@ -136,19 +149,38 @@ const CreatePedido = () => {
                 cliente,
                 paquetes: selectedPaquetes,
                 estado: 'En proceso',
-                ingredientesSeleccionados: formattedIngredientesSeleccionados
+                metodoPago,
+                ingredientesSeleccionados: formattedIngredientesSeleccionados,
             };
     
-            console.log('Datos del pedido:', pedidoData);
+            if (metodoPago === 'Tarjeta') {
+                // Generar el token con PaymentForm
+                const stripe = window.Stripe("pk_test_51QR0G4RsZYaPFezKssehsZe72JzAuR7TZUnFdItrIYCJ2fybPKYYdFtRT85VJZim9Ob94HkehOqNH2Lnorox004m00viOw6JFZ"); // Sustituye con tu clave pública de Stripe
+                const { paymentMethod, error } = await stripe.createPaymentMethod({
+                    type: "card",
+                    card: { /* Pasa los datos del formulario de tarjeta */ },
+                });
     
-            await axios.post(URI_PEDIDOS, pedidoData);
+                if (error) {
+                    console.error("Error generando token de Stripe:", error.message);
+                    alert("Hubo un problema al procesar el pago con tarjeta.");
+                    return;
+                }
+    
+                pedidoData.token = paymentMethod.id; // Añade el token al pedido
+                pedidoData.totalPagado = monto; // Añade el monto al pedido
+            }
+    
+            const pedidoResponse = await axios.post(URI_PEDIDOS, pedidoData);
+            const idPedidoCreado = pedidoResponse.data.idPedido;
+    
+            alert("Pedido creado correctamente.");
             navigate('/home/pedidos');
         } catch (error) {
-            console.error('Error creating pedido:', error);
+            console.error("Error creando el pedido:", error);
         }
     };
     
-
     return (
         <Container>
             <h1>Crear Pedido</h1>
@@ -163,7 +195,21 @@ const CreatePedido = () => {
                         required
                     />
                 </div>
-                <button type="button" className="btn btn-secondary mb-3" onClick={addPaquete}>Añadir Paquete</button>
+                <div className="mb-3">
+                    <label className="form-label">Método de Pago</label>
+                    <select
+                        className="form-select"
+                        value={metodoPago}
+                        onChange={(e) => setMetodoPago(e.target.value)}
+                        required
+                    >
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                    </select>
+                </div>
+                <button type="button" className="btn btn-secondary mb-3" onClick={addPaquete}>
+                    Añadir Paquete
+                </button>
                 {selectedPaquetes.map((selectedPaquete, index) => (
                     <div key={index} className="mb-3">
                         <label className="form-label">Paquete</label>
@@ -185,42 +231,56 @@ const CreatePedido = () => {
                                 <label className="form-label">{producto.nombre}</label>
                                 <div className="d-flex">
                                     <select id={`select-${index}-${producto.idProducto}`} className="form-select">
-                                        {ingredientesDisponibles[index] && ingredientesDisponibles[index][producto.idProducto]?.length > 0 ? (
-                                            ingredientesDisponibles[index][producto.idProducto].map(ingrediente => (
+                                        {ingredientesDisponibles[index]?.[producto.idProducto]?.map(
+                                            ingrediente => (
                                                 <option key={ingrediente.idIng} value={ingrediente.idIng}>
                                                     {ingrediente.nombre}
                                                 </option>
-                                            ))
-                                        ) : (
-                                            <option value="">No hay ingredientes disponibles</option>
+                                            )
                                         )}
                                     </select>
-                                    <button type="button" className="btn btn-primary ms-2" onClick={() => handleIngredienteAdd(index, producto.idProducto)}>
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary ms-2"
+                                        onClick={() => handleIngredienteAdd(index, producto.idProducto)}
+                                    >
                                         Agregar
                                     </button>
                                 </div>
                                 <ul className="list-group mt-2">
-                                    {ingredientesSeleccionados[index] && ingredientesSeleccionados[index][producto.idProducto]?.length > 0 ? (
-                                        ingredientesSeleccionados[index][producto.idProducto].map(ingrediente => (
-                                            <li key={ingrediente.idIng} className="list-group-item d-flex justify-content-between align-items-center">
+                                    {ingredientesSeleccionados[index]?.[producto.idProducto]?.map(
+                                        ingrediente => (
+                                            <li
+                                                key={ingrediente.idIng}
+                                                className="list-group-item d-flex justify-content-between align-items-center"
+                                            >
                                                 {ingrediente.nombre}
-                                                <button type="button" className="btn btn-danger btn-sm" onClick={() => handleIngredienteRemove(index, producto.idProducto, ingrediente.idIng)}>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => handleIngredienteRemove(index, producto.idProducto, ingrediente.idIng)}
+                                                >
                                                     Eliminar
                                                 </button>
                                             </li>
-                                        ))
-                                    ) : (
-                                        <li className="list-group-item">No hay ingredientes seleccionados</li>
+                                        )
                                     )}
                                 </ul>
                             </div>
                         ))}
-                        <button type="button" className="btn btn-danger mb-3" onClick={() => removePaquete(index)}>Eliminar Paquete</button>
+                        <button
+                            type="button"
+                            className="btn btn-danger mb-3"
+                            onClick={() => removePaquete(index)}
+                        >
+                            Eliminar Paquete
+                        </button>
                     </div>
                 ))}
-                <button type="submit" className="btn btn-primary">Crear Pedido</button>
+                <button type="submit" className="btn btn-primary mt-3">
+                    Crear Pedido
+                </button>
             </form>
-            <Link to="/home/pedidos" className="btn btn-secondary mt-2">Regresar</Link>
         </Container>
     );
 };
